@@ -1,0 +1,422 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import '@taiga-ui/core/styles/taiga-ui-local.scss';
+
+h2 {
+  font-family: 'Roboto', sans-serif !important;
+  font-weight: 500 !important;
+}
+
+[tuiAppearance][data-appearance='light-green'] {
+  color: var(--tui-text-positive-hover);
+  background: var(--tui-text-primary-on-accent-1);
+
+  --tui-border-focus: var(--tui-chart-categorical-06);
+
+  .appearance-hover {
+    color: var(--tui-text-positive);
+    background: var(--tui-text-primary-on-accent-1);
+  }
+
+  .appearance-active {
+    color: var(--tui-text-positive);
+    background: var(--tui-text-primary-on-accent-1);
+  }
+}
+
+.background-blue {
+  background-color: rgb(38, 58, 117);
+}
+
+.background-green {
+  background-color: rgb(87, 112, 26);
+}
+
+.badge-gray {
+  color: #3a3a3a;
+}
+
+.badge-green {
+  background: #618c16;
+}
+
+@keyframes subtle-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  /* Quick pulse up */
+  3% {
+    transform: scale(1.01);
+  }
+  /* Long pause before repeating */
+  18%, 99% {
+    transform: scale(1);
+  }
+}
+
+.card-container {
+  background-color: white;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  margin: 10px 0;
+}
+
+/* When any card is hovered, stop animations for all cards */
+.card-container:hover .pulsating {
+  animation-play-state: paused;
+}
+
+/* Base poster class with common styles */
+.poster {
+  padding: 0.75rem;
+  color: #fff;
+  width: 100%;
+  block-size: 8rem;
+  cursor: pointer;
+
+  [tuiSubtitle] {
+    color: #fff;
+  }
+
+  /* The heart SVG always scales on hover regardless of other classes */
+  &:hover::after {
+    transform: scale(1.1);
+  }
+
+  &.disabled {
+    background: grey;
+    cursor: default;
+
+    &:hover::after {
+      transform: none; /* Don't scale heart on disabled cards */
+    }
+  }
+}
+
+/* Pulsating animation class */
+.pulsating {
+  animation: subtle-pulse 8s ease-in-out infinite;
+
+  &.disabled {
+    animation: none;
+  }
+}
+
+.hoverable {
+  transition: transform 0.2s ease-out;
+
+  &:hover {
+    transform: scale(1.02) !important;
+  }
+
+  &.disabled:hover {
+    transform: none !important;
+  }
+}
+
+.svg-heart-bg::after {
+  content: '';
+  position: absolute;
+  background: url('/assets/images/heart.svg') bottom right no-repeat;
+  background-size: 100px 100px;
+  left: -30px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.svg-pregnant-bg::after {
+  content: '';
+  position: absolute;
+  background: url('/assets/images/pregnant.svg') bottom right no-repeat;
+  background-size: 100px 100px;
+  left: -30px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.svg-calendar-bg::after {
+  content: '';
+  position: absolute;
+  background: url('/assets/images/calendar.svg') bottom right no-repeat;
+  background-size: 100px 100px;
+  left: -30px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.svg-watch-bg::after {
+  content: '';
+  position: absolute;
+  background: url('/assets/images/watch.svg') bottom right no-repeat;
+  background-size: 100px 100px;
+  left: -30px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+.custom-card-header {
+  font-size: 1.2rem !important;
+}
+
+.custom-subtitle {
+  max-width: 70% !important;
+  font-size: 0.875rem !important;
+  margin-left: 0.125rem !important;
+  color: white;
+}
+
+.default-cursor {
+  cursor: default;
+}
+
+.custom-header {
+  font-family: 'Roboto', sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 2rem !important;
+  line-height: 1.1 !important;
+}
+
+.max-width-100 {
+  max-width: 100% !important;
+}
+
+.background-navy {
+  background-color: rgb(38, 58, 117);
+}
+
+.background-royal-blue {
+  background-color: rgb(46, 78, 158);
+}
+
+.background-indigo {
+  background-color: rgb(75, 61, 145);
+}
+
+.background-cobalt {
+  background-color: rgb(0, 71, 171);
+}
+
+.background-sea-blue {
+  background-color: rgb(0, 105, 148);
+}
+
+.background-dark-green {
+  background-color: rgb(25, 77, 51);
+}
+
+.background-emerald {
+  background-color: rgb(4, 120, 87);
+}
+
+.background-forest {
+  background-color: rgb(34, 87, 26);
+}
+
+.background-olive {
+  background-color: rgb(87, 112, 26);
+}
+
+.background-teal {
+  background-color: rgb(15, 118, 110);
+}
+
+/* Красная/оранжевая палитра */
+.background-burgundy {
+  background-color: rgb(128, 0, 32);
+}
+
+.background-terracotta {
+  background-color: rgb(173, 78, 48);
+}
+
+.background-wine {
+  background-color: rgb(114, 47, 55);
+}
+
+.background-dark-red {
+  background-color: rgb(139, 0, 0);
+}
+
+.background-brown-red {
+  background-color: rgb(120, 54, 31);
+}
+
+/* Фиолетовая палитра */
+.background-aubergine {
+  background-color: rgb(97, 64, 81);
+}
+
+.background-plum {
+  background-color: rgb(89, 11, 71);
+}
+
+.background-purple {
+  background-color: rgb(73, 35, 101);
+}
+
+.background-magenta {
+  background-color: rgb(139, 0, 98);
+}
+
+.background-violet-blue {
+  background-color: rgb(50, 44, 118);
+}
+
+/* Нейтральная палитра */
+.background-graphite {
+  background-color: rgb(69, 69, 69);
+}
+
+.background-charcoal {
+  background-color: rgb(54, 59, 64);
+}
+
+.background-chocolate {
+  background-color: rgb(88, 47, 14);
+}
+
+.background-dark-brown {
+  background-color: rgb(74, 44, 28);
+}
+
+.background-slate {
+  background-color: rgb(75, 77, 82);
+}
+
+.badge-navy {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.badge-royal-blue {
+  background-color: rgba(92, 155, 255, 0.8);
+  color: #ffffff;
+}
+
+.badge-indigo {
+  background-color: rgba(150, 123, 220, 0.8);
+  color: #ffffff;
+}
+
+.badge-cobalt {
+  background-color: rgba(120, 170, 255, 0.8);
+  color: #ffffff;
+}
+
+.badge-sea-blue {
+  background-color: rgba(100, 200, 240, 0.8);
+  color: #ffffff;
+}
+
+/* Батчи для зеленой палитры */
+.badge-dark-green {
+  background-color: rgba(180, 230, 180, 0.8);
+  color: #135434;
+}
+
+.badge-emerald {
+  background-color: rgba(140, 255, 200, 0.8);
+  color: #003e2f;
+}
+
+.badge-forest {
+  background-color: rgba(170, 230, 150, 0.8);
+  color: #1a3a10;
+}
+
+.badge-olive {
+  background-color: rgba(215, 245, 150, 0.8);
+  color: #3c4d0a;
+}
+
+.badge-teal {
+  background-color: rgba(130, 255, 240, 0.8);
+  color: #00423c;
+}
+
+/* Батчи для красной/оранжевой палитры */
+.badge-burgundy {
+  background-color: rgba(255, 170, 180, 0.8);
+  color: #5a000f;
+}
+
+.badge-terracotta {
+  background-color: rgba(255, 200, 170, 0.8);
+  color: #7a3116;
+}
+
+.badge-wine {
+  background-color: rgba(255, 180, 190, 0.8);
+  color: #551923;
+}
+
+.badge-dark-red {
+  background-color: rgba(255, 150, 150, 0.8);
+  color: #750000;
+}
+
+.badge-brown-red {
+  background-color: rgba(255, 190, 150, 0.8);
+  color: #5a2811;
+}
+
+/* Батчи для фиолетовой палитры */
+.badge-aubergine {
+  background-color: rgba(220, 180, 220, 0.8);
+  color: #432c38;
+}
+
+.badge-plum {
+  background-color: rgba(240, 160, 220, 0.8);
+  color: #400030;
+}
+
+.badge-purple {
+  background-color: rgba(190, 150, 255, 0.8);
+  color: #2e1541;
+}
+
+.badge-magenta {
+  background-color: rgba(255, 150, 220, 0.8);
+  color: #5f0042;
+}
+
+.badge-violet-blue {
+  background-color: rgba(170, 160, 255, 0.8);
+  color: #1c1740;
+}
+
+/* Батчи для нейтральной палитры */
+.badge-graphite {
+  background-color: rgba(200, 200, 200, 0.8);
+  color: #333333;
+}
+
+.badge-charcoal {
+  background-color: rgba(180, 180, 180, 0.8);
+  color: #242729;
+}
+
+.badge-chocolate {
+  background-color: rgba(255, 210, 170, 0.8);
+  color: #4a2508;
+}
+
+.badge-dark-brown {
+  background-color: rgba(230, 200, 170, 0.8);
+  color: #3a2214;
+}
+
+.badge-slate {
+  background-color: rgba(190, 200, 210, 0.8);
+  color: #333539;
+}
