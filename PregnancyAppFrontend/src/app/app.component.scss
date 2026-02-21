@@ -1,0 +1,87 @@
+/* Основные стили компонентов */
+
+.drawer {
+  top: 0;
+  width: 15rem;
+  opacity: 1;
+  background-color: #fff;
+  border-radius: 0;
+  box-shadow: var(--tui-shadow-small);
+}
+
+.header {
+  position: sticky;
+  top: 0;
+}
+
+.container-fluid {
+  padding: 0;
+}
+
+/* Стили для табов и их контейнера */
+.tabs-wrapper {
+  width: 100%;
+  background-color: white;
+  box-shadow: var(--tui-shadow-small);
+  min-height: 50px;
+}
+
+.tabs {
+  width: 100%;
+  padding: 0;
+}
+
+.tabs-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 5rem;
+  padding-right: 5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.tabs-content button[tuiTab] {
+  flex: 1;
+}
+
+/* Стили для кнопок в табах */
+.tabs-content button[tuiTab] {
+  margin-right: 20px;
+  min-width: 100px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.tabs-content button[tuiTab]:last-child {
+  margin-right: 0;
+}
+
+.content-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 5rem;
+  padding-right: 5rem;
+}
+
+.d-flex.align-items-center {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100%;
+}
+
+::ng-deep tui-tabs._underline [tuiTab]:hover:not(._active),
+::ng-deep [tuiTabs]._underline [tuiTab]:hover:not(._active) {
+  box-shadow: none !important;
+}
+
+:host {
+  --tui-background-base: #fffbfb;
+  --tui-background-elevation-1: #fffbfb;
+  --tui-radius-m: 6px;
+  --tui-font-heading: 'Roboto', sans-serif;
+  --tui-font-text: 'Roboto', sans-serif;
+}

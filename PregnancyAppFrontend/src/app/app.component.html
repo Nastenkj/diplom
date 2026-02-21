@@ -1,0 +1,88 @@
+<div class="app-wrapper">
+  <tui-root>
+    <div class="container-fluid p-0">
+      <div class="tabs-wrapper" *ngIf="isAuthenticated">
+        <tui-tabs class="tabs">
+          <div class="tabs-content">
+            <button *ngIf="!isAdmin"
+                    [routerLink]="['/']"
+                    tuiTab
+                    [class.tui-tab_active]="isActiveTab('/')">
+              <div class="d-flex align-items-center">
+                <tui-icon [icon]="'house'"></tui-icon> <span class="ms-1">Главная</span>
+              </div>
+            </button>
+
+            <button *appHasPermission="'doctor.patients'"
+                    [routerLink]="['/patients']"
+                    tuiTab
+                    [class.tui-tab_active]="isActiveTab('/patients')">
+              <div class="d-flex align-items-center">
+                <tui-icon [icon]="'users'"></tui-icon> <span class="ms-1">Список пациентов</span>
+              </div>
+            </button>
+
+            <button *appHasPermission="'admin.doctors'"
+                    [routerLink]="['/doctors']"
+                    tuiTab
+                    [class.tui-tab_active]="isActiveTab('/doctors')">
+              <div class="d-flex align-items-center">
+                <tui-icon [icon]="'users-round'"></tui-icon> <span class="ms-1">Список врачей</span>
+              </div>
+            </button>
+
+            <button *appHasPermission="'admin.doctors'"
+                    [routerLink]="['/register-doctor']"
+                    tuiTab
+                    [class.tui-tab_active]="isActiveTab('/register-doctor')">
+              <div class="d-flex align-items-center">
+                <tui-icon [icon]="'user-round-plus'"></tui-icon> <span class="ms-1">Создать аккаунт врача</span>
+              </div>
+            </button>
+
+            <ng-container class="patients-tabs" *ngIf="showPatientTabs">
+              <button *appHasPermission="'patient.edit'"
+                      [routerLink]="['/patient-profile']"
+                      tuiTab
+                      [class.tui-tab_active]="isActiveTab('/patient-profile')">
+                <div class="d-flex align-items-center">
+                  <tui-icon [icon]="'user-round-pen'"></tui-icon> <span class="ms-1">Профиль</span>
+                </div>
+              </button>
+            </ng-container>
+
+            <ng-container class="patients-tabs" *ngIf="showDoctorTabs">
+              <button *appHasPermission="'doctor.edit'"
+                      [routerLink]="['/doctor-profile']"
+                      tuiTab
+                      [class.tui-tab_active]="isActiveTab('/doctor-profile')">
+                <div class="d-flex align-items-center">
+                  <tui-icon [icon]="'user-round-pen'"></tui-icon> <span class="ms-1">Профиль</span>
+                </div>
+              </button>
+
+              <button *appHasPermission="'doctor.edit'"
+                      [routerLink]="['/observation-parameters']"
+                      tuiTab
+                      [class.tui-tab_active]="isActiveTab('/observation-parameters')">
+                <div class="d-flex align-items-center">
+                  <tui-icon [icon]="'settings'"></tui-icon> <span class="ms-1">Настройка параметров</span>
+                </div>
+              </button>
+            </ng-container>
+
+            <button routerLink="/login" tuiTab (click)="logout()">
+              <div class="d-flex align-items-center">
+                <tui-icon [icon]="'log-out'"></tui-icon> <span class="ms-1">Выйти</span>
+              </div>
+            </button>
+          </div>
+        </tui-tabs>
+      </div>
+
+      <div class="content-container">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </tui-root>
+</div>
