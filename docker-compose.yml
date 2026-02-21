@@ -1,0 +1,58 @@
+version: '3.5'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: ./PregnancyAppBackend/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=mssql;Database=PregnancyAppDb;User=sa;Password=${DB_PASSWORD};TrustServerCertificate=True
+    expose:
+      - "8080" 
+    depends_on:
+      - mssql
+    restart: unless-stopped
+    networks:
+      - backend-network
+      - frontend-network
+
+  frontend:
+    build:
+      context: ./PregnancyAppFrontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    restart: unless-stopped
+    networks:
+      - frontend-network
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${DB_PASSWORD}
+      - MSSQL_PID=Express
+    volumes:
+      - mssql_data:/var/opt/mssql
+      - ./backups:/var/backups
+    restart: unless-stopped
+    networks:
+      - backend-network
+
+networks:
+  frontend-network:
+    driver: bridge
+  backend-network:
+    driver: bridge
+    internal: true
+
+volumes:
+  mssql_data:
+    driver: local
