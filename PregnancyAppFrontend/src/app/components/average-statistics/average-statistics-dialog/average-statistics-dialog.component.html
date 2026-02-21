@@ -1,0 +1,96 @@
+<ng-template
+  #template
+  let-observer
+>
+  <tui-app-bar tuiAppBarSize>
+    <div class="d-flex justify-content-between align-items-center">
+    <button
+      tuiButton
+      appearance="action-destructive"
+      tuiSlot="right"
+      type="button"
+      class="me-2"
+      (click)="downloadStatistics($event)"
+    >
+      <tui-icon [icon]="'download'" class="mr-1"></tui-icon>
+      Выгрузить
+    </button>
+    <h2 *appHasPermission="'doctor.edit'" tuiHeader="m" class="ms-1 mb-1">
+      <span tuiTitle>Анализ</span>
+    </h2>
+    <button
+      tuiButton
+      tuiSlot="right"
+      type="button"
+      (click)="onClose($event, observer)"
+    >
+      Закрыть
+    </button>
+    </div>
+  </tui-app-bar>
+
+  <div class="statistics-container">
+
+<!--    <ng-container *ngIf="true">-->
+<!--      <div-->
+<!--        tuiCardMedium-->
+<!--        tuiSurface-->
+<!--        class="poster-demo background-green default-cursor mb-3"-->
+<!--      >-->
+
+<!--        <h2 tuiTitle>-->
+<!--          <div class="d-flex align-items-center">-->
+<!--            <tui-icon [icon]="'info'"></tui-icon>-->
+<!--            <span class="custom-card-header ms-1">Норма</span>-->
+<!--          </div>-->
+<!--          <span class="custom-subtitle" tuiSubtitle> Все показатели находятся в пределах нормальных значений, внимание врача не требуется. </span>-->
+<!--        </h2>-->
+<!--      </div>-->
+<!--    </ng-container>-->
+
+<!--    <ng-container *ngIf="false">-->
+<!--      <div-->
+<!--        tuiCardMedium-->
+<!--        tuiSurface-->
+<!--        class="poster-demo background-warning default-cursor mb-3"-->
+<!--      >-->
+
+<!--        <h2 tuiTitle>-->
+<!--          <div class="d-flex align-items-center">-->
+<!--            <tui-icon  [icon]="'octagon-alert'"></tui-icon>-->
+<!--            <span class="custom-card-header ms-1">Внимание</span>-->
+<!--          </div>-->
+<!--          <span class="custom-subtitle" tuiSubtitle> Один или несколько показателей некритично выходят за рамки нормы, требуется обратить внимание на возможную патологию. </span>-->
+<!--        </h2>-->
+<!--      </div>-->
+<!--    </ng-container>-->
+
+<!--    <ng-container *ngIf="false">-->
+<!--      <div-->
+<!--        tuiCardMedium-->
+<!--        tuiSurface-->
+<!--        class="poster-demo background-patology default-cursor mb-3"-->
+<!--      >-->
+
+<!--        <h2 tuiTitle>-->
+<!--          <div class="d-flex align-items-center">-->
+<!--            <tui-icon  [icon]="'triangle-alert'"></tui-icon>-->
+<!--            <span class="custom-card-header ms-1">Патология</span>-->
+<!--          </div>-->
+<!--          <span class="custom-subtitle" tuiSubtitle> Один или несколько показателей значительно выходят за рамки нормального диапазона. Требуется немедленное внимание врача. </span>-->
+<!--        </h2>-->
+<!--      </div>-->
+<!--    </ng-container>-->
+
+
+    <div *ngFor="let parameter of statisticsData" class="parameter-item">
+      <h3 tuiTitle class="ms-1 mb-1">{{ getParameterDisplayName(parameter.parameterName) }}</h3>
+      <div class="parameter-value">{{ parameter.value }}</div>
+      <div class="parameter-status"
+           [class.normal]="isWithinNorm(parameter)"
+           [class.abnormal]="!isWithinNorm(parameter)">
+        {{ isWithinNorm(parameter) ? 'Входит в норму' : 'Не входит в норму' }}
+      </div>
+    </div>
+  </div>
+</ng-template>

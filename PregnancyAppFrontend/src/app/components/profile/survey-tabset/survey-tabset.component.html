@@ -1,0 +1,42 @@
+<section class="content" *ngIf="patientId !== undefined">
+  <nav
+    tuiTabs
+    vertical="left"
+    class="left"
+  >
+    <button
+      (click)="changeActiveItemIndex(0)"
+      tuiTab
+      type="button"
+    >
+      Анамнез
+    </button>
+    <button
+      (click)="changeActiveItemIndex(1)"
+      tuiTab
+      type="button"
+    >
+      Ежедневные опросы
+    </button>
+    <button
+      (click)="changeActiveItemIndex(2)"
+      tuiTab
+      type="button"
+    >
+      Еженедельные опросы
+    </button>
+  </nav>
+  <span *ngIf="activeItemIndex === 0">
+    <app-medical-history-tab [patientId]="patientId"></app-medical-history-tab>
+  </span>
+  <div *ngIf="activeItemIndex === 1">
+    <app-daily-surveys-tab [patientId]="patientId"></app-daily-surveys-tab>
+
+  </div>
+  <div *ngIf="activeItemIndex === 2">
+    <app-weekly-surveys-tab [patientId]="patientId"></app-weekly-surveys-tab>
+  </div>
+
+</section>
+
+

@@ -1,0 +1,44 @@
+<tui-tabs-with-more
+  [itemsLimit]="3"
+  [(activeItemIndex)]="activeItemIndex"
+>
+  <button
+    *tuiItem
+    iconStart="@tui.user"
+    tuiTab
+    type="button"
+  >
+    Информация о пациенте
+  </button>
+  <button
+    *tuiItem
+    iconStart="@tui.clipboard-plus"
+    tuiTab
+    type="button"
+  >
+    Информация об опросниках
+  </button>
+  <ng-container *appHasPermission="'admin.doctor_details'"
+  >
+  <button
+    *tuiItem
+    iconStart="@tui.chart-line"
+    tuiTab
+    type="button"
+  >
+     Cтатистика пациента
+  </button>
+  </ng-container>
+</tui-tabs-with-more>
+
+<div *ngIf="allowShowTabs">
+  <div *ngIf="activeItemIndex === 0 && disableEditAbility !== null">
+    <app-patient [disableEditAbility]="disableEditAbility" [patientId]="patientId"></app-patient>
+  </div>
+  <div *ngIf="activeItemIndex === 1">
+    <app-survey-tabset [patientId]="patientId"></app-survey-tabset>
+  </div>
+  <div *ngIf="activeItemIndex === 2">
+    <app-statistic *ngIf="patientId !== null" [patientId]="patientId"></app-statistic>
+  </div>
+</div>

@@ -1,0 +1,104 @@
+<tui-loader
+  class="loader"
+  [inheritColor]="true"
+  [overlay]="isLoading"
+  [showLoader]="isLoading"
+>
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col-6 align-items-center">
+        <div class="row">
+          <div class="col d-flex flex-column align-items-center">
+            <img src="assets/images/logo.svg" alt="" class="mb-1 mt-3">
+            <h2 tuiTitle="m" class="mb-3">Pregnancy Compass</h2>
+          </div>
+        </div>
+        <div tuiAppearance="neutral" tuiCardLarge style="background-color: white; padding-bottom: 0; border: 1px solid #dadada; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+          <h2 tuiTitle="m" style="text-align: center;">
+            Регистрация
+            <div tuiSubtitle style="color: #525252; text-align: center;" class="mb-3">Войдите в Ваш аккаунт или зарегистрируйтесь</div>
+          </h2>
+
+          <div class="row">
+            <!-- Левая колонка -->
+            <div class="col-md-6">
+              <tui-input formControlName="fullName" class="mb-2">
+                ФИО
+                <input tuiTextfieldLegacy type="text" />
+              </tui-input>
+
+              <tui-input-phone formControlName="phoneNumber" class="mb-2">
+                Номер телефона
+                <input
+                  autocomplete="tel"
+                  tuiTextfieldLegacy
+                />
+              </tui-input-phone>
+
+              <tui-input formControlName="trustedPersonFullName" class="mb-2">
+                ФИО доверенного лица
+                <input tuiTextfieldLegacy type="text" />
+              </tui-input>
+
+              <tui-input formControlName="trustedPersonEmail" class="mb-2">
+                Email доверенного лица
+                <input autocomplete="email" tuiTextfieldLegacy type="email" />
+              </tui-input>
+            </div>
+
+            <!-- Правая колонка -->
+            <div class="col-md-6">
+              <tui-input-date
+                formControlName="birthDate"
+                class="mb-2"
+              >
+                Дата рождения
+              </tui-input-date>
+
+              <tui-input formControlName="email" class="mb-2">
+                Email
+                <input autocomplete="email" tuiTextfieldLegacy type="email" />
+              </tui-input>
+
+              <tui-input-phone formControlName="trustedPersonPhoneNumber" class="mb-2">
+                Номер телефона доверенного лица
+                <input
+                  autocomplete="tel"
+                  tuiTextfieldLegacy
+                />
+              </tui-input-phone>
+
+              <tui-input formControlName="insuranceNumber" class="mb-2">
+                Номер полиса ОМС
+                <input tuiTextfieldLegacy type="text" />
+              </tui-input>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <tui-input-password formControlName="password" class="mb-3">
+                Пароль
+              </tui-input-password>
+            </div>
+          </div>
+
+          <div class="my-2">
+            <button [appearance]="'primary'" size="m" tuiButton type="submit" (click)="onSubmit()" style="width: 100%;">
+              Регистрация
+            </button>
+          </div>
+
+          <div style="margin: 0 -24px 0;">
+            <a [appearance]="'primary'" [routerLink]="'/login'" size="m" tuiButton type="button"
+               style="padding: 0; margin: 0; width: 100%; border-radius: 0;">
+              Есть аккаунт? Войти
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-3"></div>
+    </div>
+  </form>
+</tui-loader>

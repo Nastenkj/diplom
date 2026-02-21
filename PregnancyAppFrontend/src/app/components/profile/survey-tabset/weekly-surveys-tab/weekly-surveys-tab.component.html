@@ -1,0 +1,92 @@
+<ng-container *ngIf="data$ | async">
+  <button
+    *ngIf="allSurveys.length > 0"
+    tuiButton
+    type="button"
+    size="s"
+    appearance="info"
+    (click)="downloadSurveyResults()"
+  >
+    Выгрузить
+  </button>
+  <div class="mb-3" *ngIf="allSurveys.length > 0">
+    <tui-table-pagination
+      [page]="page"
+      [size]="size"
+      [total]="total"
+      (paginationChange)="onPagination($event)"
+    ></tui-table-pagination>
+  </div>
+
+  <table
+    *ngIf="allSurveys.length > 0"
+    tuiTable
+    class="table"
+    [columns]="columns"
+  >
+    <thead>
+    <tr tuiThGroup>
+      <th
+        tuiTh
+      >
+        Дата
+      </th>
+      <th
+        tuiTh
+      >
+        Действия
+      </th>
+    </tr>
+    </thead>
+    <tbody
+      tuiTbody
+      [data]="paginatedData"
+    >
+    <tr
+      *ngFor="let item of paginatedData"
+      tuiTr
+    >
+      <td
+        *tuiCell="'date'"
+        tuiTd
+      >
+        {{ item.creationDateUtc | date:'dd.MM.yyyy HH:mm' }}
+      </td>
+      <td
+        *tuiCell="'action'"
+        tuiTd
+      >
+        <button
+          tuiButton
+          type="button"
+          size="s"
+          (click)="viewSurveyResult(item.id)"
+          class="mb-1"
+        >
+          Просмотр
+        </button>
+
+        <button
+          tuiButton
+          type="button"
+          size="s"
+          appearance="info"
+          (click)="downloadSurveyResult(item.id)"
+        >
+          Скачать
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</ng-container>
+
+<div *ngIf="(data$ | async) && allSurveys.length === 0" class="weekly-surveys-not-field-message">
+  Пациент не проходил еженедельных опросов
+</div>
+
+<app-weekly-survey
+  [openEvent]="openWeeklySurvey$"
+  [isFormReadonly]="true"
+  [prepopulatedWeeklySurvey]="selectedSurvey">
+</app-weekly-survey>

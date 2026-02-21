@@ -1,0 +1,6 @@
+<div *appDoesntHavePermission="'admin.doctors'"><button tuiButton (click)="openStatisticsDialog()">Анализ значений</button></div>
+<app-average-statistics-dialog
+  [openEvent]="openDialog$"
+  [statisticsData]="statisticsData"
+  [patientId]="patientId">
+</app-average-statistics-dialog>

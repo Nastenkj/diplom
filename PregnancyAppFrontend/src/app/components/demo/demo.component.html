@@ -1,0 +1,46 @@
+<div class="card-container" *appHasPermission="'patient.daily_survey'">
+  <div class="custom-header">
+    Опросники
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-2 g-3 my-3">
+    <!-- Info Card -->
+    <div class="col">
+      <div
+        tuiCardMedium
+        tuiSurface
+        class="poster background-light-blue svg-heart-bg default-cursor h-100"
+      >
+        <h2 tuiTitle>
+          <div class="d-flex align-items-center">
+            <tui-icon [icon]="'info'"></tui-icon>
+            <span class="custom-card-header ms-1">Пожалуйста, пройдите представленные опросники.</span>
+          </div>
+          <span class="custom-subtitle" tuiSubtitle>Ваши ответы помогут врачу лучше оценить ваше состояние и подобрать оптимальное лечение, если оно потребуется.
+            Вся информация конфиденциальна и доступна только медицинскому персоналу.</span>
+        </h2>
+      </div>
+    </div>
+
+    <!-- Daily Survey Card -->
+    <div class="col">
+      <app-daily-survey-card class="d-block h-100" *appHasPermission="'patient.daily_survey'"></app-daily-survey-card>
+    </div>
+
+    <!-- Weekly Survey Card -->
+    <div class="col">
+      <app-weekly-survey-card class="d-block h-100" *appHasPermission="'patient.daily_survey'"></app-weekly-survey-card>
+    </div>
+
+    <!-- Medical History Card -->
+    <div class="col">
+      <app-medical-history-card
+        class="d-block h-100"
+        (medicalHistoryPopulatedEvent)="onMedicalHistoryPopulatedReceived($event)"
+        *appHasPermission="'patient.daily_survey'">
+      </app-medical-history-card>
+    </div>
+  </div>
+</div>
+
+<app-communication-link></app-communication-link>

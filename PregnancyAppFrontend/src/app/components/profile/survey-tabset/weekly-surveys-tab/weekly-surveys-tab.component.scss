@@ -1,0 +1,25 @@
+.table {
+  width: 100%;
+
+  tr {
+    height: 2.8125rem;
+  }
+
+  td {
+    &:first-child {
+      width: 10rem;
+      font-weight: bold;
+    }
+
+    &:last-child {
+      width: 6rem;
+      text-align: center;
+    }
+  }
+}
+
+.weekly-surveys-not-field-message {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 0.675rem;
+}

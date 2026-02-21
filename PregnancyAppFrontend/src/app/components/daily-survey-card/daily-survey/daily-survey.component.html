@@ -1,0 +1,251 @@
+<ng-template
+  #template
+  let-observer
+>
+  <tui-app-bar tuiAppBarSize>
+    <button
+      tuiAppBarBack
+      tuiSlot="left"
+      type="button"
+      [disabled]="!step"
+      *ngIf="step > 0"
+      (click)="step = step - 1"
+    >
+      Назад
+    </button>
+    <button
+      tuiButton
+      tuiSlot="right"
+      type="button"
+      (click)="observer.complete()"
+    >
+      Закрыть
+    </button>
+    <h2 tuiHeader="m" class="ms-1 mb-1">
+      <span style="text-align: center; display: block;" tuiTitle>Ежедневный опрос</span>
+    </h2>
+    <progress
+      max="1"
+      size="s"
+      tuiProgressBar
+      [style.width.rem]="16"
+      [value]="step"
+    ></progress>
+  </tui-app-bar>
+
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit($event, observer)"
+  >
+    <ng-container *ngIf="step === 0">
+      <h2 tuiTitle class="ms-1 mb-1">Есть ли боль внизу живота?</h2>
+      <tui-radio-list
+        formControlName="abdomenHurts"
+        [items]="abdomenHurtsRange"
+        [itemContent]="abdomenHurtsTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #abdomenHurtsTemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ abdomenHurtsStringify(value) }}
+        </span>
+      </ng-template>
+
+      <h2 tuiTitle class="ms-1 mb-1">Есть ли кровянистые выделения?</h2>
+      <tui-radio-list
+        formControlName="bloodDischarge"
+        [items]="bloodDischargeRange"
+        [itemContent]="bloodDischargeTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #bloodDischargeTemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ bloodDischargeStringify(value) }}
+        </span>
+      </ng-template>
+
+      <h2 tuiTitle class="ms-1 mb-1">Есть ли тошнота?</h2>
+      <tui-radio-list
+        formControlName="nausea"
+        [items]="nauseaRange"
+        [itemContent]="nauseaTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #nauseaTemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ nauseaStringify(value) }}
+        </span>
+      </ng-template>
+
+      <h2 tuiTitle class="ms-1 mb-1">Количество рвотных позывов за день</h2>
+      <tui-select
+        formControlName="urgeToPuke"
+        class="mb-2"
+        [stringify]="urgeToPukeStringify"
+      >
+        Сколько раз
+        <tui-data-list *tuiDataList>
+          <button
+            *ngFor="let i of urgeToPukeRange"
+            tuiOption
+            type="button"
+            [value]="i"
+            class="mb-2"
+          >
+            {{ urgeToPukeStringify(i) }}
+          </button>
+        </tui-data-list>
+      </tui-select>
+
+      <h2 tuiTitle class="ms-1 mb-1">Температура тела</h2>
+      <tui-input
+        class="mb-2"
+        formControlName="temperature"
+      >
+        Температура
+        <input
+          tuiTextfieldLegacy
+          [maskito]="bodyTemperatureMask"
+        />
+      </tui-input>
+
+      <h2 tuiTitle class="ms-1 mb-1">Артериальное давление (верхнее/нижнее)</h2>
+      <tui-input
+        class="mb-2"
+        formControlName="bloodPressure"
+      >
+        Давление
+        <input
+          [maskito]="bloodPressureMask"
+          tuiTextfieldLegacy
+        />
+      </tui-input>
+
+      <h2 tuiTitle class="ms-1 mb-1">Пульс</h2>
+      <tui-input
+        class="mb-2"
+        formControlName="heartRate"
+      >
+        Пульс
+        <input
+          tuiTextfieldLegacy
+          [maskito]="numberMask"
+        />
+      </tui-input>
+
+      <h2 tuiTitle class="ms-1 mb-1">Глюкоза в крови</h2>
+      <tui-input
+        class="mb-2"
+        formControlName="glucoseLevel"
+      >
+        Введите показатель (введите число или оставьте поле пустым)
+        <input
+          tuiTextfieldLegacy
+          [maskito]="decimalMask"
+        />
+      </tui-input>
+
+      <button
+        tuiButton
+        class="btn-full-width mt-4"
+        type="button"
+        [disabled]="!isStep0Valid"
+        (click)="step = 1"
+      >
+        Далее
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="step === 1">
+      <h2 tuiTitle class="ms-1 mb-1">Результаты экспресс-анализа мочи</h2>
+      <tui-input class="mb-2" formControlName="uro">
+        URO (введите число или оставьте поле пустым)
+        <input [maskito]="decimalMask" tuiTextfieldLegacy />
+      </tui-input>
+      <tui-input class="mb-2" formControlName="bld">
+        BLD (введите число или оставьте поле пустым)
+        <input [maskito]="decimalMask" tuiTextfieldLegacy />
+      </tui-input>
+      <tui-input class="mb-2" formControlName="bil">
+        BIL (введите число или оставьте поле пустым)
+        <input [maskito]="decimalMask" tuiTextfieldLegacy />
+      </tui-input>
+      <tui-input class="mb-2" formControlName="ket">
+        KET (введите число или оставьте поле пустым)
+        <input [maskito]="decimalMask" tuiTextfieldLegacy />
+      </tui-input>
+      <tui-input class="mb-2" formControlName="leu">
+        LEU (введите число или оставьте поле пустым)
+        <input [maskito]="decimalMask" tuiTextfieldLegacy />
+      </tui-input>
+      <tui-input class="mb-2" formControlName="glu">
+        GLU (введите число или оставьте поле пустым)
+        <input [maskito]="decimalMask" tuiTextfieldLegacy />
+      </tui-input>
+      <tui-input class="mb-2" formControlName="pro">
+        PRO (введите число или оставьте поле пустым)
+        <input [maskito]="decimalMask" tuiTextfieldLegacy />
+      </tui-input>
+      <tui-input class="mb-2" formControlName="ph">
+        PH (введите число или оставьте поле пустым)
+        <input [maskito]="decimalMask" tuiTextfieldLegacy />
+      </tui-input>
+      <tui-input class="mb-2" formControlName="nit">
+        NIT (введите число или оставьте поле пустым)
+        <input [maskito]="decimalMask" tuiTextfieldLegacy />
+      </tui-input>
+      <tui-input class="mb-2" formControlName="sg">
+        SG (введите число или оставьте поле пустым)
+        <input [maskito]="decimalMask" tuiTextfieldLegacy />
+      </tui-input>
+
+      <h2 tuiTitle class="ms-1 mb-1">Показатель уровня кислорода в крови</h2>
+      <tui-input [maskito]="decimalMask" class="mb-2" formControlName="oxygenLevel">
+        Уровень кислорода (введите число или оставьте поле пустым)
+        <input tuiTextfieldLegacy />
+      </tui-input>
+
+      <h2 tuiTitle class="ms-1 mb-1">Дополнительная информация</h2>
+      <tui-textarea
+        #additionalInfoTextarea
+        formControlName="additionalInformation"
+        class="mb-2 field-large"
+        [expandable]="additionalInfoTextarea.focused"
+        [style.min-height.rem]="3.5"
+      >
+        Если Вы хотите сообщить дополнительную информацию о своем самочуствии - введите её в этом окне
+      </tui-textarea>
+
+      <button
+        tuiButton
+        class="btn-full-width mt-4"
+        type="submit"
+        *ngIf="!isFormReadonly"
+        [disabled]="!isStep1Valid"
+      >
+        Отправить
+      </button>
+
+      <button
+        *ngIf="isFormReadonly"
+        tuiButton
+        class="btn-full-width mb-2"
+        (click)="onClose($event, observer)"
+      >
+        Закрыть
+      </button>
+    </ng-container>
+  </form>
+</ng-template>

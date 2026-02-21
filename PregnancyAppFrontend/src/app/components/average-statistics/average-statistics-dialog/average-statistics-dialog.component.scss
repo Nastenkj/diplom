@@ -1,0 +1,75 @@
+.statistics-container {
+  padding: 16px;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+.parameter-item {
+  margin-bottom: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+}
+
+.parameter-name {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.parameter-value {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.parameter-status {
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.normal {
+  background-color: #e0f7e0;
+  color: #3d863d;
+}
+
+.abnormal {
+  background-color: #f7e0e0;
+  color: #863d3d;
+}
+
+.poster-demo {
+  padding: 0.75rem;
+  color: #fff;
+  width: 100%;
+  cursor: pointer;
+  height: 50%;
+  [tuiSubtitle] {
+    color: #fff;
+  }
+}
+
+.background-green {
+  background-color: var(--tui-status-positive);
+}
+
+.background-warning {
+  background-color: #ff6331;
+}
+
+.background-patology {
+  background-color: #e70016;
+}
+
+
+.custom-card-header {
+  font-size: 1.2rem !important;
+}
+
+.custom-subtitle {
+  max-width: 100% !important;
+  font-size: 0.875rem !important;
+  margin-left: 0.125rem !important;
+  color: white;
+}
+

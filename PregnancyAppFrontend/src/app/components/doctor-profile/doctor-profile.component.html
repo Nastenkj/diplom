@@ -1,0 +1,33 @@
+<tui-tabs-with-more
+  [itemsLimit]="2"
+  [(activeItemIndex)]="activeItemIndex"
+>
+  <button
+    *tuiItem
+    iconStart="@tui.user"
+    tuiTab
+    type="button"
+  >
+    Информация о враче
+  </button>
+  <ng-container *appHasPermission="'admin.doctors'">
+    <button
+      *tuiItem
+      iconStart="@tui.clipboard-plus"
+      tuiTab
+      type="button"
+    >
+      Параметры
+    </button>
+  </ng-container>
+</tui-tabs-with-more>
+
+<div *ngIf="allowShowTabs !== null">
+  <div *ngIf="activeItemIndex === 0">
+    <app-doctor-info [doctorId]="doctorId"></app-doctor-info>
+  </div>
+  <div *ngIf="activeItemIndex === 1">
+    <app-observation-parameters [doctorId]="doctorId"></app-observation-parameters>
+  </div>
+</div>
+

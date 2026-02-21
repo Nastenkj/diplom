@@ -1,0 +1,70 @@
+<div class="container" style="margin-top: 2rem;">
+  <div class="row">
+    <div class="col-2">
+    <tui-select
+      class="mb-3"
+      [(ngModel)]="selectedField"
+      (ngModelChange)="onFieldChange()"
+      [stringify]="getFieldDisplayName"
+    >
+      Показатель
+      <tui-data-list *tuiDataList>
+        <button
+          *ngFor="let field of fieldOptions"
+          tuiOption
+          type="button"
+          [value]="field"
+        >
+          {{ getFieldDisplayName(field) }}
+        </button>
+      </tui-data-list>
+    </tui-select>
+
+      <tui-input-date-range
+        class="mb-3"
+        [maxLength]="maxLength"
+        [(ngModel)]="dateRange"
+        (ngModelChange)="onDateRangeChange($event)"
+        [min]="minDate"
+        [max]="maxDate"
+      >
+        Период
+      </tui-input-date-range>
+<div>
+      <app-average-statistics [patientId]="patientId"></app-average-statistics>
+</div>
+    </div>
+
+    <div class="col-10">
+      <div *ngIf="!tableEmpty">
+        <ngx-charts-line-chart
+          class="chart"
+          [scheme]="colorScheme"
+          [results]="multi"
+          [gradient]="false"
+          [xAxis]="xAxis"
+          [yAxis]="yAxis"
+          [legend]="legend"
+          [showXAxisLabel]="showXAxisLabel"
+          [showYAxisLabel]="showYAxisLabel"
+          [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel"
+          [timeline]="timeline"
+          [autoScale]="true"
+          [animations]="animations"
+          [yAxisTickFormatting]="yAxisTickFormatting"
+          [xAxisTickFormatting]="formatXAxisDate"
+          [yAxisTicks]="yAxisTicks"
+          (select)="onSelect($event)"
+          (activate)="onActivate($event)"
+          (deactivate)="onDeactivate($event)"
+        >
+        </ngx-charts-line-chart>
+      </div>
+
+      <div *ngIf="tableEmpty" class="statistics-no-data">
+        Для данного показателя нет данных
+      </div>
+    </div>
+  </div>
+</div>

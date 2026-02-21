@@ -1,0 +1,20 @@
+<div
+  tuiCardMedium
+  tuiSurface
+  class="poster hoverable pulsating background-terracotta svg-calendar-bg"
+  [class.disabled]="isDisabled"
+  (click)="!isDisabled && openWeeklySurvey$.next()">
+  <h2 tuiTitle>
+    <div class="d-flex align-items-center">
+      <tui-icon [icon]="'calendar-range'"></tui-icon>
+      <span class="custom-card-header ms-1"> Еженедельный опросник </span>
+    </div>
+    <span class="custom-subtitle" tuiSubtitle>Оценка состояния за неделю: симптомы, отёки, питание и прибавка в весе.</span>
+  </h2>
+
+  <tui-badge class="badge badge-aubergine ">
+    <tui-icon icon="@tui.calendar" />
+    {{ whenNeedToTakeSurvey | tuiFormatDate | async }}
+  </tui-badge>
+</div>
+<app-weekly-survey (surveySubmitted)="onSurveySubmit()" [openEvent]="openWeeklySurvey$"></app-weekly-survey>

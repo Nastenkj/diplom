@@ -1,0 +1,23 @@
+<div
+  tuiCardMedium
+  tuiSurface
+  class="poster hoverable pulsating background-emerald svg-pregnant-bg"
+  (click)="openMedicalHistory$.next()"
+  *ngIf="!medicalHistoryPopulated"
+>
+  <h2 tuiTitle>
+    <div class="d-flex align-items-center">
+      <tui-icon [icon]="'clipboard-plus'"></tui-icon>
+      <span class="custom-card-header ms-1"> Анамнез </span>
+    </div>
+    <span class="custom-subtitle" tuiSubtitle>Базовая информация о здоровье и истории беременностей.
+      Заполняется один раз в начале наблюдения.</span>
+  </h2>
+
+  <tui-badge class="badge badge-gray">
+    <tui-icon icon="@tui.calendar" />
+    {{ now | tuiFormatDate | async }}
+  </tui-badge>
+</div>
+
+<app-medical-history (onObserverComplete)="onObserverComplete()" [isFormReadonly]="false" [openEvent]="openMedicalHistory$"></app-medical-history>

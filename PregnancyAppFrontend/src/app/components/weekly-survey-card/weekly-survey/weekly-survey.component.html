@@ -1,0 +1,293 @@
+<ng-template
+  #template
+  let-observer
+>
+  <tui-app-bar tuiAppBarSize>
+    <button
+      tuiAppBarBack
+      tuiSlot="left"
+      type="button"
+      [disabled]="!step"
+      *ngIf="step > 0"
+      (click)="step = step - 1"
+    >
+      Назад
+    </button>
+    <button
+      tuiButton
+      tuiSlot="right"
+      type="button"
+      (click)="observer.complete()"
+    >
+      Закрыть
+    </button>
+    <h2 tuiHeader="m" class="ms-1 mb-1">
+      <span style="text-align: center; display: block;" tuiTitle>Недельный опрос</span>
+    </h2>
+    <progress
+      max="1"
+      size="s"
+      tuiProgressBar
+      [style.width.rem]="16"
+      [value]="step"
+    ></progress>
+  </tui-app-bar>
+
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit($event, observer)"
+  >
+    <ng-container *ngIf="step === 0">
+      <h2 tuiTitle class="ms-1 mb-1">Наблюдались ли симптомы ОРВИ</h2>
+      <tui-radio-list
+        formControlName="ORVIRadio"
+        [items]="ORVIRange"
+        [itemContent]="ORVITemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #ORVITemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ ORVIStringify(value) }}
+        </span>
+      </ng-template>
+
+      <div *ngIf="allergicReactionsPositiveSelected">
+        <tui-input formControlName="ORVI" class="mb-2">
+          Какие симптомы
+          <input tuiTextfieldLegacy />
+        </tui-input>
+      </div>
+
+      <h2 tuiTitle class="ms-1 mb-1 mt-2">Повышалась ли темература выше 37.2?</h2>
+      <tui-radio-list
+        formControlName="unordinaryTempRadio"
+        [items]="unordinaryTempRange"
+        [itemContent]="unordinaryTempTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #unordinaryTempTemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ unordinaryTempStringify(value) }}
+        </span>
+      </ng-template>
+
+      <div *ngIf="unordinaryTempPositiveSelected">
+        <tui-input
+          formControlName="unordinaryTemp"
+          class="mb-2"
+        >
+          Сколько раз
+          <input
+            tuiTextfieldLegacy
+            [maskito]="numberMask"
+          />
+        </tui-input>
+      </div>
+
+      <h2 tuiTitle class="ms-1 mb-1 mt-2">Повышалось ли артериальное давление?</h2>
+      <tui-radio-list
+        formControlName="unordinaryBloodPressure"
+        [items]="getEnumNumericValues(BloodPressure)"
+        [itemContent]="unordinaryBloodPressureTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #unordinaryBloodPressureTemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ bloodPressureStringify(value) }}
+        </span>
+      </ng-template>
+
+      <h2 tuiTitle class="ms-1 mb-1">
+        Беспокоят ли гинекологические симптомы?
+      </h2>
+      <tui-radio-list
+        formControlName="gynecologicalSymptomsRadio"
+        [items]="gynecologicalSymptomsRange"
+        [itemContent]="gynecologicalSymptomsTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #gynecologicalSymptomsTemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ ORVIStringify(value) }}
+        </span>
+      </ng-template>
+
+      <div *ngIf="gynecologicalSymptomsPositiveSelected">
+        <tui-input
+          formControlName="gynecologicalSymptoms"
+          class="mb-2"
+        >
+          Какие симптомы
+          <input tuiTextfieldLegacy />
+        </tui-input>
+      </div>
+
+      <h2 tuiTitle class="ms-1 mb-1 mt-2">
+        Есть ли отклонения в анализе мочи?
+      </h2>
+      <tui-radio-list
+        formControlName="unordinaryUrine"
+        [items]="unordinaryUrineRange"
+        [itemContent]="unordinaryUrineTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #unordinaryUrineTemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ unordinaryUrineStringify(value) }}
+        </span>
+      </ng-template>
+
+      <h2 tuiTitle class="ms-1 mb-1">
+        Есть ли отёки?
+      </h2>
+      <tui-radio-list
+        formControlName="swellingRadio"
+        [items]="swellingRange"
+        [itemContent]="swellingTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #swellingTemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ swellingStringify(value) }}
+        </span>
+      </ng-template>
+
+      <div *ngIf="swellingPositiveSelected">
+        <tui-input formControlName="swelling" class="mb-2">
+          Места отёков
+          <input tuiTextfieldLegacy />
+        </tui-input>
+      </div>
+
+      <button
+        tuiButton
+        class="btn-full-width mt-4"
+        type="button"
+        [disabled]="!isStep0Valid"
+        (click)="step = 1"
+      >
+        Далее
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="step === 1">
+      <h2 tuiTitle class="ms-1 mb-1 mt-2">
+        Количество потребляемой жидкости в сутки?
+      </h2>
+      <tui-radio-list
+        formControlName="waterConsumed"
+        [items]="getEnumNumericValues(WaterConsumed)"
+        [itemContent]="waterConsumedTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #waterConsumedTemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ waterConsumedStringify(value) }}
+        </span>
+      </ng-template>
+
+      <h2 tuiTitle class="ms-1 mb-1">
+        Регулярность стула?
+      </h2>
+      <tui-radio-list
+        formControlName="stool"
+        [items]="getEnumNumericValues(Stool)"
+        [itemContent]="stoolTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #stoolTemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ stoolStringify(value) }}
+        </span>
+      </ng-template>
+
+      <h2 tuiTitle class="ms-1 mb-1">
+        Мочеиспускание
+      </h2>
+      <tui-radio-list
+        formControlName="urination"
+        [items]="getEnumNumericValues(Urination)"
+        [itemContent]="urinationTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #urinationTemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ urinationStringify(value) }}
+        </span>
+      </ng-template>
+
+      <h2 tuiTitle class="ms-1 mb-1">
+        Прибавка веса за неделю
+      </h2>
+      <tui-input formControlName="weightAdded" class="mb-2">
+        Прибавка веса
+        <input tuiTextfieldLegacy [maskito]="weightAddedMask" />
+      </tui-input>
+
+      <h2 tuiTitle class="ms-1 mb-1">
+        Неделя беременности
+      </h2>
+      <tui-input formControlName="pregnancyWeek" class="mb-2">
+        Номер недели
+        <input tuiTextfieldLegacy [maskito]="pregnancyWeekMask" />
+      </tui-input>
+
+      <button
+        tuiButton
+        tuiSlot="right"
+        type="button"
+        (click)="onClose($event, observer)"
+        *ngIf="isFormReadonly"
+      >
+        Закрыть
+      </button>
+
+      <button
+        tuiButton
+        type="submit"
+        (click)="onSubmit($event, observer)"
+        *ngIf="!isFormReadonly"
+        [disabled]="!isStep1Valid"
+        class="btn-full-width mb-2"
+      >
+        Отправить
+      </button>
+    </ng-container>
+  </form>
+</ng-template>

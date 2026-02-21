@@ -1,0 +1,23 @@
+<div
+  tuiCardMedium
+  tuiSurface
+  class="poster hoverable pulsating background-indigo svg-watch-bg"
+  [class.disabled]="isDisabled"
+  (click)="!isDisabled && openDailySurvey$.next()"
+  *ngIf="whenNeedToTakeSurvey"
+>
+  <h2 tuiTitle>
+    <div class="d-flex align-items-center">
+      <tui-icon [icon]="'stethoscope'"></tui-icon>
+      <span class="custom-card-header ms-1"> Ежедневный опросник </span>
+    </div>
+    <span class="custom-subtitle" tuiSubtitle>Текущие показатели здоровья: самочувствие, температура, давление и результаты тестов.</span>
+  </h2>
+
+  <tui-badge class="badge badge-violet-blue">
+    <tui-icon icon="@tui.calendar" />
+    {{ whenNeedToTakeSurvey | tuiFormatDate | async }}
+  </tui-badge>
+</div>
+
+<app-daily-survey (surveySubmitted)="onSurveySubmit()" [openEvent]="openDailySurvey$"></app-daily-survey>

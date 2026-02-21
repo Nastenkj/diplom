@@ -1,0 +1,42 @@
+<div class="communication-widget" *ngIf="userIsDoctor !== null && communicationLinks.length !== 0">
+  <div *ngIf="isLoading">Загрузка...</div>
+  <div *ngIf="!isLoading && error">{{ error }}</div>
+
+  <div *ngIf="!isLoading && !error && communicationLinks.length > 0">
+    <div class="custom-header">Ссылки на встречи</div>
+    <div *ngFor="let link of communicationLinks; let last = last" class="mt-3">
+      <div
+        tuiCardMedium
+        tuiSurface
+        class="poster default-cursor background-blue"
+      >
+        <h2 tuiTitle>
+          <div class="d-flex align-items-center">
+            <tui-icon [icon]="'laptop-minimal'"></tui-icon>
+            <span class="custom-card-header ms-1"> {{ userIsDoctor ? link.userName : link.doctorName }} </span>
+          </div>
+          <span class="custom-subtitle max-width-100" tuiSubtitle>
+          Нажмите, чтобы перейти по ссылке на встречу. <br/> <br/>
+          Ссылка на встречу: <a class="custom-subtitle" [href]="link.communicationLink" target="_blank">{{ link.communicationLink }}</a>
+        </span>
+        </h2>
+
+        <tui-badge class="badge badge-green">
+          <tui-icon icon="@tui.calendar" />
+          {{ formatLocalDateTime(link.meetingScheduledAtUtc) }}
+        </tui-badge>
+      </div>
+      <hr *ngIf="!last">
+    </div>
+  </div>
+</div>
+
+<div class="communication-widget" *ngIf="userIsDoctor && communicationLinks.length === 0">
+  <div *ngIf="isLoading">Загрузка...</div>
+  <div *ngIf="!isLoading && error">{{ error }}</div>
+
+  <div *ngIf="!isLoading && !error">
+    <div class="custom-header">Ссылки на встречи</div>
+    <div class="empty-links-message">Чтобы запланировать встречу с клиентом - перейдите на вкладку "Список пациентов" и создайте ссылку. <br> Она сразу же появится здесь и у пациента!</div>
+  </div>
+</div>

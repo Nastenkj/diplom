@@ -1,0 +1,8 @@
+<div *ngIf="medicalHistory !== undefined">
+  <div class="anamnes-not-field-message" *ngIf="medicalHistory === null">Анамнез ещё не заполнен пациентом</div>
+  <button *ngIf="medicalHistory !== null" tuiButton (click)="openMedicalHistory$.next()" [disabled]="medicalHistory === null">
+    Результаты анамнеза
+  </button>
+
+  <app-medical-history [prepopulatedMedicalHistory]="medicalHistory" [isFormReadonly]="true" [openEvent]="openMedicalHistory$"></app-medical-history>
+</div>

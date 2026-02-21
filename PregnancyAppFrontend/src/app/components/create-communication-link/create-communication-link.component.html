@@ -1,0 +1,74 @@
+<div class="create-link-container">
+  <div *ngIf="!createdLink">
+    <form [formGroup]="linkForm">
+      <div class="form-group mb-2 mt-2">
+        <tui-input formControlName="customLink">
+          Ссылка встречи
+          <input tuiTextfieldLegacy />
+        </tui-input>
+        <tui-error
+          [error]="[] | tuiFieldError | async"
+          [formControl]="getFormControl('customLink')"
+        ></tui-error>
+      </div>
+
+      <div class="form-group mb-3">
+        <tui-input-date-time
+          formControlName="meetingDateTime"
+          tuiUnfinishedValidator="Please select date and time"
+        >
+          Время встречи
+        </tui-input-date-time>
+        <tui-error
+          [error]="[] | tuiFieldError | async"
+          [formControl]="getFormControl('meetingDateTime')"
+        ></tui-error>
+      </div>
+
+      <div class="button-container">
+        <button
+          tuiButton
+          type="button"
+          appearance="primary"
+          size="m"
+          class="me-2"
+          [disabled]="isCreatingLink || !hasValue"
+          (click)="createLink($event)"
+        >
+          Создать
+        </button>
+        <button
+          tuiButton
+          type="button"
+          appearance="outline"
+          size="m"
+          (click)="cancel()"
+        >
+          Отменить
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="createdLink" class="link-result">
+    <div class="link-created">Ссылка успешно создана</div>
+    <div class="link">Ссылка на онлайн встречу с {{ patient.fullName }}: <a [href]="createdLink.communicationLink" class="link-link">{{ createdLink.communicationLink }}</a>
+
+    </div>
+    <div class="link-date">
+      Встреча назначена на:
+      {{ formatLocalDateTime(createdLink.meetingScheduledAtUtc) }}
+    </div>
+    <div class="button-container">
+      <button
+        tuiButton
+        type="button"
+        appearance="primary"
+        size="m"
+        (click)="submit()"
+      >
+        Закрыть
+      </button>
+    </div>
+  </div>
+</div>

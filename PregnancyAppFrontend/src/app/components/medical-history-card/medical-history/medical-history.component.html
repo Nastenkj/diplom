@@ -1,0 +1,400 @@
+<ng-template
+  #template
+  let-observer
+>
+  <tui-app-bar tuiAppBarSize>
+    <button
+      tuiAppBarBack
+      tuiSlot="left"
+      type="button"
+      [disabled]="!step"
+      *ngIf="step > 0"
+      (click)="step = step - 1"
+    >
+      Назад
+    </button>
+    <button
+      tuiButton
+      tuiSlot="right"
+      type="button"
+      (click)="observer.complete()"
+    >
+      Закрыть
+    </button>
+    <h2 tuiHeader="m" class="ms-1 mb-1">
+      <span style="text-align: center; display: block;"  tuiTitle>Сведения о беременной</span>
+    </h2>
+    <progress
+      max="2"
+      size="s"
+      tuiProgressBar
+      [style.width.rem]="22"
+      [value]="step"
+    ></progress>
+  </tui-app-bar>
+  <form [formGroup]="form" (ngSubmit)="onSubmit($event, observer)">
+    <ng-container *ngIf="step === 0">
+      <h2 tuiTitle class="ms-1 mb-1">Вес</h2>
+      <tui-input formControlName="weight" class="mb-2">
+        Вес
+        <input
+          tuiTextfieldLegacy
+          [maskito]="numberMask"
+        />
+      </tui-input>
+
+      <h2 tuiTitle class="ms-1 mb-1">Рост</h2>
+      <tui-input formControlName="height" class="mb-2">
+        Рост
+        <input
+          tuiTextfieldLegacy
+          [maskito]="numberMask"
+        />
+      </tui-input>
+
+      <div >
+      <h2 tuiTitle class="ms-1 mb-1">Группа крови</h2>
+      <tui-select
+        formControlName="bloodGroup"
+        [stringify]="bloodGroupStringify"
+        class="mb-2"
+      >
+        Группа крови
+        <tui-data-list *tuiDataList>
+          <button
+            *ngFor="let group of bloodGroupValues"
+            tuiOption
+            type="button"
+            [value]="group"
+            class="mb-2"
+          >
+            {{ bloodGroupStringify(group) }}
+          </button>
+        </tui-data-list>
+      </tui-select>
+      </div>
+
+      <h2 tuiTitle class="ms-1 mb-1">Резус-фактор</h2>
+      <tui-radio-list
+        formControlName="rhesusFactor"
+        [items]="getEnumNumericValues(RhesusFactor)"
+        [itemContent]="rhesusTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #rhesusTemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ rhesusFactorStringify(value) }}
+        </span>
+      </ng-template>
+
+      <h2 tuiTitle class="ms-1 mb-1">Рабочее артериальное давление</h2>
+      <tui-input formControlName="bloodPressure">
+        Верхнее давление/Нижнее давление
+        <input
+          tuiTextfieldLegacy
+          [maskito]="bloodPressureMask"
+        />
+      </tui-input>
+      <div
+        style="color: #bb593a;"
+        class="ms-1"
+        *ngIf="form.get('bloodPressure')?.errors?.['bloodPressureInvalid']"
+      >
+        Неверный формат. Пример: 120/80
+      </div>
+
+      <h2 tuiTitle class="ms-1 mb-1">Какой градусник вы используете?</h2>
+      <tui-radio-list
+        formControlName="thermometer"
+        [items]="getEnumNumericValues(Thermometer)"
+        [itemContent]="thermometerTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #thermometerTemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ thermometerStringify(value) }}
+        </span>
+      </ng-template>
+
+      <button
+        tuiButton
+        type="button"
+        (click)="step = 1"
+        [disabled]="!isStep0Valid"
+        class="btn-full-width mb-2"
+      >
+        Далее
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="step === 1">
+      <h2 tuiTitle class="ms-1 mb-1">Беременность по счёту</h2>
+      <tui-select
+        formControlName="pregnancyAmount"
+        [stringify]="pregnancySelectorStringify"
+        class="mb-2"
+      >
+        Беременность по счёту
+        <tui-data-list *tuiDataList>
+          <button
+            *ngFor="let i of pregnancyRange"
+            tuiOption
+            type="button"
+            [value]="i"
+            class="mb-2"
+          >
+            {{ pregnancySelectorStringify(i) }}
+          </button>
+        </tui-data-list>
+      </tui-select>
+
+      <ng-container *ngIf="form.get('pregnancyAmount')?.value >= 1">
+        <h2 tuiTitle class="ms-1 mb-1">Количество абортов в прошлом</h2>
+        <tui-select
+          formControlName="abortionAmount"
+          [stringify]="abortionSelectorStringify"
+          class="mb-2"
+        >
+          Количество абортов в прошлом
+          <tui-data-list *tuiDataList>
+            <button
+              *ngFor="let i of abortionRange"
+              tuiOption
+              type="button"
+              [value]="i"
+              class="mb-2"
+            >
+              {{ abortionSelectorStringify(i) }}
+            </button>
+          </tui-data-list>
+        </tui-select>
+
+        <h2 tuiTitle class="ms-1 mb-1">Количество выкидышей в прошлом</h2>
+        <tui-select
+          formControlName="miscarriageAmount"
+          [stringify]="miscarriageSelectorStringify"
+          class="mb-2"
+        >
+          Количество выкидышей в прошлом
+          <tui-data-list *tuiDataList>
+            <button
+              *ngFor="let i of miscarriageRange"
+              tuiOption
+              type="button"
+              [value]="i"
+              class="mb-2"
+            >
+              {{ miscarriageSelectorStringify(i) }}
+            </button>
+          </tui-data-list>
+        </tui-select>
+
+        <h2 tuiTitle class="ms-1 mb-1">Количество преждевременных родов в прошлом</h2>
+        <tui-select
+          formControlName="prematureBirthAmount"
+          [stringify]="prematureBirthSelectorStringify"
+          class="mb-2"
+        >
+          Количество преждевременных родов в прошлом
+          <tui-data-list *tuiDataList>
+            <button
+              *ngFor="let i of prematureBirthRange"
+              tuiOption
+              type="button"
+              [value]="i"
+              class="mb-2"
+            >
+              {{ prematureBirthSelectorStringify(i) }}
+            </button>
+          </tui-data-list>
+        </tui-select>
+      </ng-container>
+
+      <h2 tuiTitle class="ms-1 mb-1">Предыдущие роды были</h2>
+      <tui-radio-list
+        formControlName="previousBirthType"
+        [items]="getEnumNumericValues(BirthType)"
+        [itemContent]="previousBirthTypeTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #previousBirthTypeTemplate let-value>
+    <span class="ms-1 mb-1">
+      {{ birthTypeStringify(value) }}
+    </span>
+      </ng-template>
+
+      <h2 tuiTitle class="ms-1 mb-1">Гинекологические заболевания</h2>
+      <tui-textarea
+        #gynecologicalTextarea
+        formControlName="gynecologicalDiseases"
+        class="mb-2 field-large"
+        [expandable]="gynecologicalTextarea.focused"
+        [style.min-height.rem]="3.5"
+      >
+        Перечислите гинекологические заболевания
+      </tui-textarea>
+
+      <button
+        tuiButton
+        type="button"
+        (click)="step = 2"
+        [disabled]="!isStep1Valid"
+        class="btn-full-width mb-2"
+      >
+        Далее
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="step === 2">
+      <h2 tuiTitle class="ms-1 mb-1">Соматические заболевания</h2>
+      <tui-textarea
+        #somaticTextarea
+        formControlName="somaticDiseases"
+        class="mb-2 field-large"
+        [expandable]="somaticTextarea.focused"
+        [style.min-height.rem]="3.5"
+      >
+        Перечислите перенесённые и текущие соматические заболевания
+      </tui-textarea>
+
+      <h2 tuiTitle class="ms-1 mb-1">Перенесённые операции</h2>
+      <tui-textarea
+        #operationsTextarea
+        formControlName="undergoneOperations"
+        class="mb-2 field-large"
+        [expandable]="operationsTextarea.focused"
+        [style.min-height.rem]="3.5"
+      >
+        Перечислите перенесённые операции
+      </tui-textarea>
+
+      <h2 tuiTitle class="ms-1 mb-1">Аллергические реакции</h2>
+      <tui-radio-list
+        formControlName="allergicReactionsRadio"
+        [items]="allergicReactionsRange"
+        [itemContent]="allergicReactionsTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #allergicReactionsTemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ allergicReactionsRadioStringify(value) }}
+        </span>
+      </ng-template>
+      <div *ngIf="allergicReactionsPositiveSelected">
+        <tui-input formControlName="allergicReactions" class="mb-2">
+          Вид аллергии
+          <input tuiTextfieldLegacy />
+        </tui-input>
+      </div>
+
+      <h2 tuiTitle class="ms-1 mb-1">Наследственность</h2>
+      <tui-multi-select
+        formControlName="hereditaryDiseases"
+        [stringify]="hereditaryDiseaseStringify"
+        class="mb-2"
+      >
+        Наследственность
+        <tui-data-list
+          *tuiDataList
+          tuiMultiSelectGroup
+        >
+          <button
+            *ngFor="let item of getEnumNumericValues(HereditaryDisease)"
+            tuiOption
+            type="button"
+            [value]="item"
+            class="mb-2"
+          >
+            {{ hereditaryDiseaseStringify(item) }}
+          </button>
+        </tui-data-list>
+      </tui-multi-select>
+
+      <h2 tuiTitle class="ms-1 mb-1">Вы курите?</h2>
+      <tui-radio-list
+        formControlName="isSmoking"
+        [items]="isSmokingRange"
+        [itemContent]="isSmokingTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #isSmokingTemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ isSmokingRadioStringify(value) }}
+        </span>
+      </ng-template>
+
+      <h2 tuiTitle class="ms-1 mb-1">Вы употребляете алкоголь?</h2>
+      <tui-radio-list
+        formControlName="isConsumingAlcohol"
+        [items]="isConsumingAlcoholRange"
+        [itemContent]="isConsumingAlcohol"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #isConsumingAlcohol let-value>
+        <span class="ms-1 mb-1">
+          {{ isConsumingAlcoholStringify(value) }}
+        </span>
+      </ng-template>
+
+      <h2 tuiTitle class="ms-1 mb-1">Вы болели Covid-19?</h2>
+      <tui-radio-list
+        formControlName="enduredCovid"
+        [items]="getEnumNumericValues(CovidStatus)"
+        [itemContent]="covidTemplate"
+        [style.flex-direction]="'row'"
+        [style.width]="'max-content'"
+        size="m"
+        class="mb-2"
+      >
+      </tui-radio-list>
+      <ng-template #covidTemplate let-value>
+        <span class="ms-1 mb-1">
+          {{ covidStatusStringify(value) }}
+        </span>
+      </ng-template>
+
+      <button
+        *ngIf="!isFormReadonly"
+        tuiButton
+        type="submit"
+        [disabled]="!isStep2Valid"
+        class="btn-full-width mb-2"
+      >
+        Сохранить
+      </button>
+
+      <button
+        *ngIf="isFormReadonly"
+        tuiButton
+        class="btn-full-width mb-2"
+        (click)="onClose($event, observer)"
+      >
+        Закрыть
+      </button>
+    </ng-container>
+  </form>
+</ng-template>

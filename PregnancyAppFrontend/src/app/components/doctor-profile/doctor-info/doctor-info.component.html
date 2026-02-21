@@ -1,0 +1,69 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h2 tuiTitle class="mb-1 mt-3">Общая информация</h2>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <tui-input formControlName="fullName">
+                  Полное имя
+                  <span class="tui-required"></span>
+                </tui-input>
+                <tui-error></tui-error>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <tui-input-date formControlName="birthDate">
+                  Дата рождения
+                  <span class="tui-required"></span>
+                </tui-input-date>
+                <tui-error></tui-error>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <tui-input formControlName="phoneNumber">
+                  Номер телефона
+                  <span class="tui-required"></span>
+                </tui-input>
+                <tui-error></tui-error>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <tui-input formControlName="email">
+                  Электронная почта
+                  <span class="tui-required"></span>
+                </tui-input>
+                <tui-error></tui-error>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button
+            *appHasPermission="'admin.doctors'"
+            tuiButton
+            [disabled]="form.invalid || isSubmitting"
+            [routerLink]="['/doctors']"
+            class="me-3"
+          >
+            Вернуться к списку
+          </button>
+          <button
+            *appHasPermission="'doctor.edit'"
+            type="submit"
+            tuiButton
+            [disabled]="form.invalid || isSubmitting">
+            Сохранить изменения
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<form [formGroup]="form">
+  <div class="row">
+    <div class="col-4"></div>
+    <div class="col-4 d-flex flex-column align-items-center">
+      <img src="assets/images/logo.svg" alt="" class="mb-1 mt-3">
+      <h2 tuiTitle="m" class="mb-3">Pregnancy Compass</h2>
+      <div tuiAppearance="neutral" tuiCardLarge
+           style="background-color: white; padding-bottom: 0; border: 1px solid #dadada; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <h2 tuiTitle="m" style="text-align: center;">
+          Войти
+          <div tuiSubtitle style="color: #525252;" class="mb-3">Войдите в Ваш аккаунт или зарегистрируйтесь
+          </div>
+          <tui-input formControlName="email" class="mb-2">
+            Введите Email
+            <input autocomplete="email" tuiTextfieldLegacy type="email" />
+          </tui-input>
+          <tui-input-password formControlName="password">
+            Введите пароль
+          </tui-input-password>
+        </h2>
+
+        <div class="my-2">
+          <button size="m" tuiButton type="button" (click)="onSubmit()" style="width: 100%;">
+            Войти
+          </button>
+        </div>
+
+        <div style="margin: 0 -24px 0;">
+          <a [appearance]="'primary'" [routerLink]="'/register'" size="m" appearance="accent" tuiButton type="button"
+             style="padding: 0; margin: 0; width: 100%; border-radius: 0;">
+            Регистрация
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+
+    </div>
+  </div>
+</form>

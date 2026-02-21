@@ -1,0 +1,42 @@
+
+//
+//.poster-info {
+//  padding: 0.75rem;
+//  color: #fff;
+//  width: 100%;
+//  block-size: 8rem;
+//
+//  &:hover {
+//    transform: none;
+//  }
+//
+//  &::after {
+//    background: url('/assets/images/heart.svg') bottom right no-repeat;
+//    background-size: 100px 100px;
+//    left: -30px;
+//  }
+//
+//  &:hover::after {
+//    transform: scale(1.1);
+//  }
+//
+//  cursor: default;
+//
+//  [tuiSubtitle] {
+//    color: #fff;
+//  }
+//}
+
+.background-light-blue {
+  background-color: var(--tui-status-info);
+}
+
+//.custom-card-header {
+//  font-size: 1.2rem !important;
+//}
+//
+//.custom-subtitle {
+//  max-width: 70% !important;
+//  font-size: 0.875rem !important;
+//  margin-left: 0.125rem !important;
+//}

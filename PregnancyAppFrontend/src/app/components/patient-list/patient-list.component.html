@@ -1,0 +1,98 @@
+<div class="patients-container">
+  <h2>Пациенты</h2>
+
+  <div class="filters-container">
+    <tui-accordion>
+      <tui-accordion-item class="filters-accordion">
+        <tui-icon [icon]="'list-filter'"></tui-icon>
+        <ng-template tuiAccordionItemContent>
+          <div class="filter-fields">
+            <tui-input tuiTextfieldSize="m" [(ngModel)]="emailFilter" (ngModelChange)="onEmailFilterChange($event)">
+              Почта
+              <input tuiTextfieldLegacy />
+            </tui-input>
+
+            <tui-input tuiTextfieldSize="m" [(ngModel)]="nameFilter" (ngModelChange)="onNameFilterChange($event)">
+              Имя
+              <input tuiTextfieldLegacy />
+            </tui-input>
+
+            <tui-input tuiTextfieldSize="m" [(ngModel)]="phoneFilter" (ngModelChange)="onPhoneFilterChange($event)">
+              Телефон
+              <input tuiTextfieldLegacy />
+            </tui-input>
+          </div>
+        </ng-template>
+      </tui-accordion-item>
+    </tui-accordion>
+  </div>
+
+  <!-- Loading state -->
+  <div *ngIf="loading" class="loading-state">
+    <tui-loader size="l"></tui-loader>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="error" class="error-state">
+    <p class="tui-text_body-l tui-text_danger">{{ error }}</p>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination-container">
+    <tui-table-pagination
+      [total]="totalPatients"
+      [items]="sizeOptions"
+      [page]="page"
+      [size]="size"
+      (paginationChange)="onPagination($event)"
+    ></tui-table-pagination>
+  </div>
+
+  <!-- Patients table -->
+  <div *ngIf="!loading && !error" class="patients-table">
+    <table tuiTable [columns]="columns">
+      <thead>
+      <tr tuiThGroup>
+        <th tuiTh>Имя</th>
+        <th tuiTh>Почта</th>
+        <th tuiTh>Телефон</th>
+        <th tuiTh>Дата рождения</th>
+        <ng-container *appHasPermission="'doctor.create.communication.link'">
+          <th tuiTh>Действия</th>
+        </ng-container>
+      </tr>
+      </thead>
+      <tbody tuiTbody>
+      <tr
+        *ngFor="let patient of patients"
+        tuiTr
+        class="patient-row"
+        (click)="navigateToPatient(patient.id)"
+      >
+        <td *tuiCell="'fullName'" tuiTd>{{ patient.fullName }}</td>
+        <td *tuiCell="'email'" tuiTd>{{ patient.email }}</td>
+        <td *tuiCell="'phoneNumber'" tuiTd>{{ patient.phoneNumber }}</td>
+        <td *tuiCell="'birthDate'" tuiTd>{{ formatDate(patient.birthDate) }}</td>
+        <ng-container *appHasPermission="'doctor.create.communication.link'">
+          <td *tuiCell="'actions'" tuiTd>
+            <button
+              tuiButton
+              type="button"
+              appearance="primary"
+              size="s"
+              (click)="openCommunicationLinkDialog(patient, $event)"
+            >
+              Создать ссылку
+            </button>
+          </td>
+        </ng-container>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- No data state -->
+    <div *ngIf="patients.length === 0" class="no-data">
+      <p class="tui-text_body-l">Пациенты не найдены</p>
+    </div>
+  </div>
+</div>
