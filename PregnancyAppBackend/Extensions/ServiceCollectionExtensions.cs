@@ -6,6 +6,7 @@ using PregnancyAppBackend.Services.CommunicationLinkService;
 using PregnancyAppBackend.Services.DailySurveysService;
 using PregnancyAppBackend.Services.DoctorsService;
 using PregnancyAppBackend.Services.Excel;
+using PregnancyAppBackend.Services.KafkaPredictionService;
 using PregnancyAppBackend.Services.MedicalHistoriesService;
 using PregnancyAppBackend.Services.ObservationParameterNormService;
 using PregnancyAppBackend.Services.PatientsService;
@@ -38,6 +39,13 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IObservationParameterNormService, ObservationParameterNormService>();
         services.AddScoped<IAlgorithmicAnalysisService, AlgorithmicAnalysisService>();
         services.AddScoped<IExcelExportService, ExcelExportService>();
+
+        // Kafka Prediction Service
+        services.AddSingleton<IKafkaPredictionService, KafkaPredictionService>();
+
+        // Health predictions (ML results) persistence service
+        services.AddScoped<Services.HealthPredictionsService.IHealthPredictionsService,
+                           Services.HealthPredictionsService.HealthPredictionsService>();
 
         return services;
     }

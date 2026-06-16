@@ -1,5 +1,5 @@
 import {Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
-import {NgForOf, NgIf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {
   TuiAppBarBack,
@@ -15,19 +15,20 @@ import {bloodPressureValidator} from "../../../validators/blood-pressure-validat
 import {MaskitoDirective} from "@maskito/angular";
 import {decimalMask, numberMask} from "../../../masks/number-mask";
 import {bodyTemperatureMask} from "../../../masks/body-temperature-mask";
-import {bloodPressureMask} from "../../../masks/blood-pressure-mask";
+import {diastolicPressureMask, systolicPressureMask} from "../../../masks/systolic-pressure-mask";
 import {Observable, Subject, takeUntil} from "rxjs";
 import {DailySurveyDto} from "../../../dtos/daily-survey/daily-survey-dto";
 import {DailySurveyService} from "../../../shared-services/surveys/daily-surveys.service";
 import {mapTemperature, temperatureStringify} from "../../../enums/daily-survey/temperature";
 import {AlertsService} from "../../../shared-services/alerts/alerts.service";
-
+import {DailyHealthPredictionsService} from "../../../shared-services/surveys/daily-health-predictions.service";
 
 @Component({
   selector: 'app-daily-survey',
   standalone: true,
   imports: [
     NgIf,
+    NgClass,
     ReactiveFormsModule,
     TuiAppBarBack,
     TuiAppBarComponent,
@@ -89,21 +90,38 @@ export class DailySurveyComponent implements OnInit, OnDestroy {
 
     if (this.form.valid) {
       const tempValue = parseFloat(this.form.value.temperature);
+      const systolic = parseInt(this.form.value.upperPressure) || 120;
+      const diastolic = parseInt(this.form.value.lowerPressure) || 80;
+
       const dailySurvey: DailySurveyDto = {
         ...this.form.value,
+        // Температура для ML:
+        // - temperatureRaw: дробное значение без квантизации/округлений
+        // - temperature: оставляем старый enum-контракт для совместимости
+        temperatureRaw: tempValue,
+
         temperature: mapTemperature(tempValue),
-        systolicPressure: parseInt(this.form.value.bloodPressure.split('/')[0]),
-        diastolicPressure: parseInt(this.form.value.bloodPressure.split('/')[1])
+
+        systolicPressure: systolic,
+        diastolicPressure: diastolic
       };
 
       this.dailySurveysService.postDailySurvey(dailySurvey)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (response: DailySurveyDto) => {
-            // console.log(response);
             this.surveySubmitted.next();
             this.alertsService.alertPositive('Результат ежедневного опроса сохранён.');
-            observer.complete()
+
+            // Уведомление о завершении ML показываем с задержкой 3 секунды
+            // (ML результат приходит асинхронно через Kafka и сохраняется в БД).
+            setTimeout(() => {
+              this.alertsService.alertPositive(
+                'Уведомление: завершена обработка ежедневного опроса. Результат можно посмотреть в профиле в разделе информация об опросниках ежедневные опросы'
+              );
+            }, 3000);
+
+            observer.complete();
           },
           error: (error: any) => {
             this.alertsService.alertPositive('Ошибка сохранения результата ежедневного опроса.');
@@ -130,7 +148,8 @@ export class DailySurveyComponent implements OnInit, OnDestroy {
       nausea: new FormControl(null, [Validators.required]),
       urgeToPuke: new FormControl(null, [Validators.required]),
       temperature: new FormControl(null, [Validators.required]),
-      bloodPressure: new FormControl(null, [Validators.required, bloodPressureValidator()]),
+      upperPressure: new FormControl(null, [Validators.required]),
+      lowerPressure: new FormControl(null, [Validators.required]),
       heartRate: new FormControl(null, [Validators.required]),
       glucoseLevel: new FormControl(null),
       hemoglobinLevel: new FormControl(null, [Validators.pattern('^[0-9]*(\\.[0-9]+)?$')]),
@@ -173,7 +192,8 @@ export class DailySurveyComponent implements OnInit, OnDestroy {
       this.form.get('nausea')?.valid &&
       this.form.get('urgeToPuke')?.valid &&
       this.form.get('temperature')?.valid &&
-      this.form.get('bloodPressure')?.valid &&
+      this.form.get('upperPressure')?.valid &&
+      this.form.get('lowerPressure')?.valid &&
       this.form.get('heartRate')?.valid &&
       this.form.get('glucoseLevel')?.valid &&
       this.form.get('hemoglobinLevel')?.valid &&
@@ -201,7 +221,8 @@ export class DailySurveyComponent implements OnInit, OnDestroy {
         temperature: this.isFormReadonly
           ? temperatureStringify(this.prepopulatedDailySurvey.temperature)
           : this.prepopulatedDailySurvey.temperature,
-        bloodPressure: `${this.prepopulatedDailySurvey.systolicPressure}/${this.prepopulatedDailySurvey.diastolicPressure}`,
+        upperPressure: this.prepopulatedDailySurvey.systolicPressure,
+        lowerPressure: this.prepopulatedDailySurvey.diastolicPressure,
         heartRate: this.prepopulatedDailySurvey.heartRate,
         glucoseLevel: this.prepopulatedDailySurvey.glucoseLevel,
         hemoglobinLevel: this.prepopulatedDailySurvey.hemoglobinLevel,
@@ -274,9 +295,11 @@ export class DailySurveyComponent implements OnInit, OnDestroy {
     }
   }
 
+
   protected readonly numberMask = numberMask;
   protected readonly decimalMask = decimalMask;
   protected readonly bodyTemperatureMask = bodyTemperatureMask;
-  protected readonly bloodPressureMask = bloodPressureMask;
+  protected readonly systolicPressureMask = systolicPressureMask;
+  protected readonly diastolicPressureMask = diastolicPressureMask;
   protected readonly temperatureStringify = temperatureStringify;
 }

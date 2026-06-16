@@ -10,6 +10,10 @@ public class DailySurveyDto
     public bool Nausea { get; set; }
     public int UrgeToPuke { get; set; }
     public Temperature Temperature { get; set; }
+
+    // Сырое значение температуры, чтобы ML получал дробное без потери точности.
+    // Например 36.6
+    public double? TemperatureRaw { get; set; }
     public int SystolicPressure { get; set; }
     public int DiastolicPressure { get; set; }
     public int HeartRate { get; set; }

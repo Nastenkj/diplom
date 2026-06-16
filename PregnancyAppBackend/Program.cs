@@ -14,6 +14,7 @@ using PregnancyAppBackend.Persistance;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
+using PregnancyAppBackend.Services.KafkaPredictionService;
 
 namespace PregnancyAppBackend;
 
@@ -70,6 +71,10 @@ public class Program
                           .AllowAnyHeader();
                 });
             });
+
+            // Kafka settings
+            builder.Services.Configure<KafkaSettings>(
+                builder.Configuration.GetSection("Kafka"));
 
             // Swagger/OpenAPI Configuration
             builder.Services.AddEndpointsApiExplorer();

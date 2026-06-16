@@ -1,0 +1,58 @@
+version: '3.5'
+
+services:
+  model-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      # Монтируем все три модели
+      - ./model_trimester_1.joblib:/app/models/model_trimester_1.joblib:ro
+      - ./model_trimester_2.joblib:/app/models/model_trimester_2.joblib:ro
+      - ./model_trimester_3.joblib:/app/models/model_trimester_3.joblib:ro
+    environment:
+      # Пути к трём моделям
+      - MODEL_PATH_T1=/app/models/model_trimester_1.joblib
+      - MODEL_PATH_T2=/app/models/model_trimester_2.joblib
+      - MODEL_PATH_T3=/app/models/model_trimester_3.joblib
+    restart: unless-stopped
+    networks:
+      - backend-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - backend-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge
+

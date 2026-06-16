@@ -24,6 +24,7 @@ public class DatabaseContext : DbContext, IDatabaseContext
     public DbSet<PatientDoctorCommunicationLink> PatientDoctorCommunicationLinks { get; set; } = null!;
     public DbSet<ObservationParameterNorm> ObservationParameterNorms { get; set; } = null!;
     public DbSet<AlgorithmicAnalysisParameterValue> AlgorithmicAnalysisParameterValues { get; set; } = null!;
+    public DbSet<HealthPredictionResult> HealthPredictionResults { get; set; } = null!;
     public DbSet<Role> Roles { get; set; } = null!;
     public DbSet<ApiClaim> ApiClaims { get; set; } = null!;
 
@@ -38,6 +39,7 @@ public class DatabaseContext : DbContext, IDatabaseContext
         modelBuilder.ApplyConfiguration(new DailySurveyConfiguration());
         modelBuilder.ApplyConfiguration(new WeeklySurveyConfiguration());
         modelBuilder.ApplyConfiguration(new AlgorithmicAnalysisParameterValueConfiguration());
+        modelBuilder.ApplyConfiguration(new HealthPredictionResultConfiguration());
 
         DisableCascadeDeletion(modelBuilder);
 

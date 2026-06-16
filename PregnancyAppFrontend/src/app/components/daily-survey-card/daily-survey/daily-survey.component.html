@@ -116,22 +116,33 @@
       >
         Температура
         <input
+          type="text"
           tuiTextfieldLegacy
           [maskito]="bodyTemperatureMask"
         />
       </tui-input>
 
-      <h2 tuiTitle class="ms-1 mb-1">Артериальное давление (верхнее/нижнее)</h2>
-      <tui-input
-        class="mb-2"
-        formControlName="bloodPressure"
-      >
-        Давление
-        <input
-          [maskito]="bloodPressureMask"
-          tuiTextfieldLegacy
-        />
-      </tui-input>
+      <h2 tuiTitle class="ms-1 mb-1">Артериальное давление</h2>
+
+      <div class="d-flex gap-2 mb-2" style="align-items: end;">
+        <tui-input style="flex: 1;">
+          Верхнее (систолическое)
+          <input
+            [maskito]="systolicPressureMask"
+            tuiTextfieldLegacy
+            formControlName="upperPressure"
+          />
+        </tui-input>
+
+        <tui-input style="flex: 1;">
+          Нижнее (диастолическое)
+          <input
+            [maskito]="diastolicPressureMask"
+            tuiTextfieldLegacy
+            formControlName="lowerPressure"
+          />
+        </tui-input>
+      </div>
 
       <h2 tuiTitle class="ms-1 mb-1">Пульс</h2>
       <tui-input
@@ -237,6 +248,7 @@
       >
         Отправить
       </button>
+
 
       <button
         *ngIf="isFormReadonly"

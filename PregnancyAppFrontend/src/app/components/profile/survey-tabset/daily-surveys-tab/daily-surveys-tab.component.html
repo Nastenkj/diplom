@@ -69,6 +69,17 @@
           tuiButton
           type="button"
           size="s"
+          appearance="warning"
+          class="mb-1 ms-1"
+          (click)="viewSurveyMlResults(item)"
+        >
+          Просмотр результатов
+        </button>
+
+        <button
+          tuiButton
+          type="button"
+          size="s"
           appearance="info"
           (click)="downloadSurveyResult(item.id)"
         >
@@ -83,6 +94,56 @@
 <div *ngIf="(data$ | async) && allSurveys.length === 0" class="daily-surveys-not-field-message">
   Пациент не проходил ежедневных опросов
 </div>
+
+<div *ngIf="mlLoading" class="daily-surveys-not-field-message">
+  Загрузка результатов ML...
+</div>
+
+<div *ngIf="mlError" class="daily-surveys-not-field-message">
+  {{ mlError }}
+</div>
+
+<ng-template #mlDialogTemplate>
+  <div class="daily-surveys-ml-results">
+    <div class="daily-surveys-ml-results__header">
+      <b>Результат ML</b>
+      <span class="daily-surveys-ml-results__status">
+        Статус: {{ selectedMlResult ? getPredictionLabel(selectedMlResult.prediction) : '' }}
+      </span>
+    </div>
+
+    <div
+      class="daily-surveys-ml-results__actions"
+      *ngIf="selectedMlResult && getDoctorActionsText(selectedMlResult.prediction)"
+    >
+      {{ getDoctorActionsText(selectedMlResult!.prediction) }}
+    </div>
+
+    <div class="daily-surveys-ml-results__text" *ngIf="selectedMlResult?.predictionText">
+      {{ selectedMlResult?.predictionText }}
+    </div>
+
+    <div class="daily-surveys-ml-results__deviations-title">
+      Проблемные показатели:
+    </div>
+
+    <ul
+      class="daily-surveys-ml-results__deviations"
+      *ngIf="selectedMlResult?.deviations?.length; else noDeviations"
+    >
+      <li *ngFor="let d of selectedMlResult!.deviations">
+        <b>{{ d.feature }}</b>:
+        значение {{ d.value }}
+        (норма: {{ d.normalRange }}),
+        {{ d.severity }} — {{ d.message }}
+      </li>
+    </ul>
+
+    <ng-template #noDeviations>
+      Нет проблемных показателей.
+    </ng-template>
+  </div>
+</ng-template>
 
 <app-daily-survey
   [openEvent]="openDailySurvey$"

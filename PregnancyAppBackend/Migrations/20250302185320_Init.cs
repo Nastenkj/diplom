@@ -425,11 +425,15 @@ namespace PregnancyAppBackend.Migrations
             var adminUserId = Guid.NewGuid();
             var doctorUserId1 = Guid.NewGuid();
             var doctorUserId2 = Guid.NewGuid();
+
             var patientUserId1 = Guid.NewGuid();
             var patientUserId2 = Guid.NewGuid();
             var patientUserId3 = Guid.NewGuid();
+            var patientUserId4 = Guid.NewGuid();
+            var patientUserId5 = Guid.NewGuid();
+            var patientUserId6 = Guid.NewGuid();
 
-            string passwordHash = HashService.SHA512("123");
+            var passwordHash = HashService.SHA512("123");
 
             // Insert Admin User
             migrationBuilder.InsertData(
@@ -461,85 +465,85 @@ namespace PregnancyAppBackend.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Email", "PasswordHash", "IsDeleted", "DateOfChangeOfAccessRights" },
-                values: new object[]
-                {
-                    patientUserId1, "patient1@example.com", passwordHash, false, null
-                });
+                values: new object[] { patientUserId1, "patient1@example.com", passwordHash, false, null });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Email", "PasswordHash", "IsDeleted", "DateOfChangeOfAccessRights" },
-                values: new object[]
-                {
-                    patientUserId2, "patient2@example.com", passwordHash, false, null
-                });
+                values: new object[] { patientUserId2, "patient2@example.com", passwordHash, false, null });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Email", "PasswordHash", "IsDeleted", "DateOfChangeOfAccessRights" },
-                values: new object[]
-                {
-                    patientUserId3, "patient3@example.com", passwordHash, false, null
-                });
+                values: new object[] { patientUserId3, "patient3@example.com", passwordHash, false, null });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "PasswordHash", "IsDeleted", "DateOfChangeOfAccessRights" },
+                values: new object[] { patientUserId4, "patient4@example.com", passwordHash, false, null });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "PasswordHash", "IsDeleted", "DateOfChangeOfAccessRights" },
+                values: new object[] { patientUserId5, "patient5@example.com", passwordHash, false, null });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "PasswordHash", "IsDeleted", "DateOfChangeOfAccessRights" },
+                values: new object[] { patientUserId6, "patient6@example.com", passwordHash, false, null });
 
             // Assign roles to users
-            // Admin user gets admin role
             migrationBuilder.InsertData(
                 table: "UserRoles",
                 columns: new[] { "UserId", "RoleId" },
-                values: new object[]
-                {
-                    adminUserId, administratorRoleId
-                });
-
-            // Doctor users get doctor role
-            migrationBuilder.InsertData(
-                table: "UserRoles",
-                columns: new[] { "UserId", "RoleId" },
-                values: new object[]
-                {
-                    doctorUserId1, doctorRoleId
-                });
+                values: new object[] { adminUserId, administratorRoleId });
 
             migrationBuilder.InsertData(
                 table: "UserRoles",
                 columns: new[] { "UserId", "RoleId" },
-                values: new object[]
-                {
-                    doctorUserId2, doctorRoleId
-                });
-
-            // Patient users get client role
-            migrationBuilder.InsertData(
-                table: "UserRoles",
-                columns: new[] { "UserId", "RoleId" },
-                values: new object[]
-                {
-                    patientUserId1, clientRoleId
-                });
+                values: new object[] { doctorUserId1, doctorRoleId });
 
             migrationBuilder.InsertData(
                 table: "UserRoles",
                 columns: new[] { "UserId", "RoleId" },
-                values: new object[]
-                {
-                    patientUserId2, clientRoleId
-                });
+                values: new object[] { doctorUserId2, doctorRoleId });
 
             migrationBuilder.InsertData(
                 table: "UserRoles",
                 columns: new[] { "UserId", "RoleId" },
-                values: new object[]
-                {
-                    patientUserId3, clientRoleId
-                });
+                values: new object[] { patientUserId1, clientRoleId });
 
-            // Create patient info for each patient
+            migrationBuilder.InsertData(
+                table: "UserRoles",
+                columns: new[] { "UserId", "RoleId" },
+                values: new object[] { patientUserId2, clientRoleId });
+
+            migrationBuilder.InsertData(
+                table: "UserRoles",
+                columns: new[] { "UserId", "RoleId" },
+                values: new object[] { patientUserId3, clientRoleId });
+
+            migrationBuilder.InsertData(
+                table: "UserRoles",
+                columns: new[] { "UserId", "RoleId" },
+                values: new object[] { patientUserId4, clientRoleId });
+
+            migrationBuilder.InsertData(
+                table: "UserRoles",
+                columns: new[] { "UserId", "RoleId" },
+                values: new object[] { patientUserId5, clientRoleId });
+
+            migrationBuilder.InsertData(
+                table: "UserRoles",
+                columns: new[] { "UserId", "RoleId" },
+                values: new object[] { patientUserId6, clientRoleId });
+
+            // PatientCommonInfos
             var patientInfo1Id = Guid.NewGuid();
             migrationBuilder.InsertData(
                 table: "PatientCommonInfos",
-                columns: new[] { "Id", "FullName", "PhoneNumber", "TrustedPersonFullName", 
-                                "TrustedPersonPhoneNumber", "TrustedPersonEmail", 
+                columns: new[] { "Id", "FullName", "PhoneNumber", "TrustedPersonFullName",
+                                "TrustedPersonPhoneNumber", "TrustedPersonEmail",
                                 "InsuranceNumber", "BirthDate", "UserId" },
                 values: new object[]
                 {
@@ -551,8 +555,8 @@ namespace PregnancyAppBackend.Migrations
             var patientInfo2Id = Guid.NewGuid();
             migrationBuilder.InsertData(
                 table: "PatientCommonInfos",
-                columns: new[] { "Id", "FullName", "PhoneNumber", "TrustedPersonFullName", 
-                                "TrustedPersonPhoneNumber", "TrustedPersonEmail", 
+                columns: new[] { "Id", "FullName", "PhoneNumber", "TrustedPersonFullName",
+                                "TrustedPersonPhoneNumber", "TrustedPersonEmail",
                                 "InsuranceNumber", "BirthDate", "UserId" },
                 values: new object[]
                 {
@@ -564,8 +568,8 @@ namespace PregnancyAppBackend.Migrations
             var patientInfo3Id = Guid.NewGuid();
             migrationBuilder.InsertData(
                 table: "PatientCommonInfos",
-                columns: new[] { "Id", "FullName", "PhoneNumber", "TrustedPersonFullName", 
-                                "TrustedPersonPhoneNumber", "TrustedPersonEmail", 
+                columns: new[] { "Id", "FullName", "PhoneNumber", "TrustedPersonFullName",
+                                "TrustedPersonPhoneNumber", "TrustedPersonEmail",
                                 "InsuranceNumber", "BirthDate", "UserId" },
                 values: new object[]
                 {
@@ -574,17 +578,56 @@ namespace PregnancyAppBackend.Migrations
                     "INS-003", new DateOnly(1992, 11, 30), patientUserId3
                 });
 
-            // Create basic medical history for patients
+            var patientInfo4Id = Guid.NewGuid();
+            migrationBuilder.InsertData(
+                table: "PatientCommonInfos",
+                columns: new[] { "Id", "FullName", "PhoneNumber", "TrustedPersonFullName",
+                                "TrustedPersonPhoneNumber", "TrustedPersonEmail",
+                                "InsuranceNumber", "BirthDate", "UserId" },
+                values: new object[]
+                {
+                    patientInfo4Id, "Patient Four", "+79006665554", "Trusted Person Four",
+                    "+79003332221", "trusted4@example.com",
+                    "INS-004", new DateOnly(1991, 3, 10), patientUserId4
+                });
+
+            var patientInfo5Id = Guid.NewGuid();
+            migrationBuilder.InsertData(
+                table: "PatientCommonInfos",
+                columns: new[] { "Id", "FullName", "PhoneNumber", "TrustedPersonFullName",
+                                "TrustedPersonPhoneNumber", "TrustedPersonEmail",
+                                "InsuranceNumber", "BirthDate", "UserId" },
+                values: new object[]
+                {
+                    patientInfo5Id, "Patient Five", "+79005554443", "Trusted Person Five",
+                    "+79002221110", "trusted5@example.com",
+                    "INS-005", new DateOnly(1988, 7, 25), patientUserId5
+                });
+
+            var patientInfo6Id = Guid.NewGuid();
+            migrationBuilder.InsertData(
+                table: "PatientCommonInfos",
+                columns: new[] { "Id", "FullName", "PhoneNumber", "TrustedPersonFullName",
+                                "TrustedPersonPhoneNumber", "TrustedPersonEmail",
+                                "InsuranceNumber", "BirthDate", "UserId" },
+                values: new object[]
+                {
+                    patientInfo6Id, "Patient Six", "+79004443332", "Trusted Person Six",
+                    "+79001110099", "trusted6@example.com",
+                    "INS-006", new DateOnly(1993, 9, 5), patientUserId6
+                });
+
+            // MedicalHistories (basic medical history for patients)
             migrationBuilder.InsertData(
                 table: "MedicalHistories",
-                columns: new[] { "Id", "Weight", "Height", "BloodGroup", "RhesusFactor", 
+                columns: new[] { "Id", "Weight", "Height", "BloodGroup", "RhesusFactor",
                                 "BloodPressure", "Tonometer", "Thermometer", "PregnancyAmount",
                                 "PreviousBirthType", "AllergicReactions", "HereditaryDiseases",
                                 "IsSmoking", "IsConsumingAlcohol", "EnduredCovid",
                                 "CreationDateUtc", "UserId" },
                 values: new object[]
                 {
-                    Guid.NewGuid(), 65, 170, 1, 1, 
+                    Guid.NewGuid(), 65, 170, 1, 1,
                     "120/80", 1, 1, 1,
                     1, "None", 1,
                     false, false, 1,
@@ -593,14 +636,14 @@ namespace PregnancyAppBackend.Migrations
 
             migrationBuilder.InsertData(
                 table: "MedicalHistories",
-                columns: new[] { "Id", "Weight", "Height", "BloodGroup", "RhesusFactor", 
+                columns: new[] { "Id", "Weight", "Height", "BloodGroup", "RhesusFactor",
                                 "BloodPressure", "Tonometer", "Thermometer", "PregnancyAmount",
                                 "PreviousBirthType", "AllergicReactions", "HereditaryDiseases",
                                 "IsSmoking", "IsConsumingAlcohol", "EnduredCovid",
                                 "CreationDateUtc", "UserId" },
                 values: new object[]
                 {
-                    Guid.NewGuid(), 70, 165, 2, 0, 
+                    Guid.NewGuid(), 70, 165, 2, 0,
                     "110/70", 2, 1, 2,
                     2, "Pollen", 1,
                     false, false, 1,
@@ -609,21 +652,69 @@ namespace PregnancyAppBackend.Migrations
 
             migrationBuilder.InsertData(
                 table: "MedicalHistories",
-                columns: new[] { "Id", "Weight", "Height", "BloodGroup", "RhesusFactor", 
+                columns: new[] { "Id", "Weight", "Height", "BloodGroup", "RhesusFactor",
                                 "BloodPressure", "Tonometer", "Thermometer", "PregnancyAmount",
                                 "PreviousBirthType", "AllergicReactions", "HereditaryDiseases",
                                 "IsSmoking", "IsConsumingAlcohol", "EnduredCovid",
                                 "CreationDateUtc", "UserId" },
                 values: new object[]
                 {
-                    Guid.NewGuid(), 60, 175, 3, 1, 
+                    Guid.NewGuid(), 60, 175, 3, 1,
                     "115/75", 1, 2, 1,
                     1, "Penicillin", 1,
                     false, false, 1,
                     DateTime.UtcNow, patientUserId3
                 });
 
-            // Add daily survey for the first patient
+            migrationBuilder.InsertData(
+                table: "MedicalHistories",
+                columns: new[] { "Id", "Weight", "Height", "BloodGroup", "RhesusFactor",
+                                "BloodPressure", "Tonometer", "Thermometer", "PregnancyAmount",
+                                "PreviousBirthType", "AllergicReactions", "HereditaryDiseases",
+                                "IsSmoking", "IsConsumingAlcohol", "EnduredCovid",
+                                "CreationDateUtc", "UserId" },
+                values: new object[]
+                {
+                    Guid.NewGuid(), 68, 168, 1, 0,
+                    "118/76", 2, 2, 2,
+                    0, "None", 0,
+                    false, false, 1,
+                    DateTime.UtcNow, patientUserId4
+                });
+
+            migrationBuilder.InsertData(
+                table: "MedicalHistories",
+                columns: new[] { "Id", "Weight", "Height", "BloodGroup", "RhesusFactor",
+                                "BloodPressure", "Tonometer", "Thermometer", "PregnancyAmount",
+                                "PreviousBirthType", "AllergicReactions", "HereditaryDiseases",
+                                "IsSmoking", "IsConsumingAlcohol", "EnduredCovid",
+                                "CreationDateUtc", "UserId" },
+                values: new object[]
+                {
+                    Guid.NewGuid(), 72, 160, 2, 1,
+                    "112/74", 1, 2, 3,
+                    1, "Dust", 1,
+                    false, false, 1,
+                    DateTime.UtcNow, patientUserId5
+                });
+
+            migrationBuilder.InsertData(
+                table: "MedicalHistories",
+                columns: new[] { "Id", "Weight", "Height", "BloodGroup", "RhesusFactor",
+                                "BloodPressure", "Tonometer", "Thermometer", "PregnancyAmount",
+                                "PreviousBirthType", "AllergicReactions", "HereditaryDiseases",
+                                "IsSmoking", "IsConsumingAlcohol", "EnduredCovid",
+                                "CreationDateUtc", "UserId" },
+                values: new object[]
+                {
+                    Guid.NewGuid(), 58, 172, 3, 0,
+                    "121/78", 2, 1, 1,
+                    2, "Seafood", 2,
+                    false, false, 1,
+                    DateTime.UtcNow, patientUserId6
+                });
+
+            // Add daily survey for the first patient (patient1 only, as before)
             migrationBuilder.InsertData(
                 table: "DailySurveys",
                 columns: new[] { "Id", "AbdomenHurts", "BloodDischarge", "Nausea", "UrgeToPuke",
@@ -636,7 +727,7 @@ namespace PregnancyAppBackend.Migrations
                     DateTime.UtcNow, patientUserId1
                 });
 
-            // Add weekly survey for the first patient
+            // Add weekly survey for the first patient (patient1 only, as before)
             migrationBuilder.InsertData(
                 table: "WeeklySurveys",
                 columns: new[] { "Id", "HasOrvi", "HasUnordinaryTemp", "UnordinaryBloodPressure",

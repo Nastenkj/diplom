@@ -47,7 +47,7 @@ namespace PregnancyAppBackend.Migrations
                     b.HasIndex("UserId", "ParameterId")
                         .IsUnique();
 
-                    b.ToTable("AlgorithmicAnalysisParameterValues", (string)null);
+                    b.ToTable("AlgorithmicAnalysisParameterValues");
                 });
 
             modelBuilder.Entity("PregnancyAppBackend.Entities.DailySurvey", b =>
@@ -148,10 +148,94 @@ namespace PregnancyAppBackend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("DailySurveys", null, t =>
+                    b.ToTable("DailySurveys", t =>
                         {
                             t.HasCheckConstraint("CK_DailySurvey_BloodPressure", "[BloodPressure] LIKE '[0-9][0-9]/[0-9][0-9]' OR [BloodPressure] LIKE '[0-9][0-9][0-9]/[0-9][0-9]' OR [BloodPressure] LIKE '[0-9][0-9]/[0-9][0-9][0-9]' OR [BloodPressure] LIKE '[0-9][0-9][0-9]/[0-9][0-9][0-9]'");
                         });
+                });
+
+            modelBuilder.Entity("PregnancyAppBackend.Entities.HealthPredictionDeviation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Feature")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("HealthPredictionResultId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalRange")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Severity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HealthPredictionResultId");
+
+                    b.ToTable("HealthPredictionDeviation");
+                });
+
+            modelBuilder.Entity("PregnancyAppBackend.Entities.HealthPredictionResult", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("AlertProbability")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DailySurveyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("NormalProbability")
+                        .HasColumnType("float");
+
+                    b.Property<double>("PathologyProbability")
+                        .HasColumnType("float");
+
+                    b.Property<int>("Prediction")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PredictionText")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Trimester")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DailySurveyId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId", "DailySurveyId")
+                        .IsUnique();
+
+                    b.ToTable("HealthPredictionResults");
                 });
 
             modelBuilder.Entity("PregnancyAppBackend.Entities.MedicalHistory", b =>
@@ -239,7 +323,7 @@ namespace PregnancyAppBackend.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("MedicalHistories", (string)null);
+                    b.ToTable("MedicalHistories");
                 });
 
             modelBuilder.Entity("PregnancyAppBackend.Entities.ObservationParameterNorm", b =>
@@ -266,7 +350,7 @@ namespace PregnancyAppBackend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ObservationParameterNorms", (string)null);
+                    b.ToTable("ObservationParameterNorms");
                 });
 
             modelBuilder.Entity("PregnancyAppBackend.Entities.Parameter", b =>
@@ -287,7 +371,7 @@ namespace PregnancyAppBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Parameters", (string)null);
+                    b.ToTable("Parameters");
                 });
 
             modelBuilder.Entity("PregnancyAppBackend.Entities.PatientDoctorCommunicationLink", b =>
@@ -314,7 +398,7 @@ namespace PregnancyAppBackend.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("PatientDoctorCommunicationLinks", (string)null);
+                    b.ToTable("PatientDoctorCommunicationLinks");
                 });
 
             modelBuilder.Entity("PregnancyAppBackend.Entities.Security.ApiClaim", b =>
@@ -329,7 +413,7 @@ namespace PregnancyAppBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApiClaims", (string)null);
+                    b.ToTable("ApiClaims");
                 });
 
             modelBuilder.Entity("PregnancyAppBackend.Entities.Security.Role", b =>
@@ -344,7 +428,7 @@ namespace PregnancyAppBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("PregnancyAppBackend.Entities.Security.RoleApiClaim", b =>
@@ -387,7 +471,7 @@ namespace PregnancyAppBackend.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("PregnancyAppBackend.Entities.Security.UserRole", b =>
@@ -448,7 +532,7 @@ namespace PregnancyAppBackend.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserCommonInfos", (string)null);
+                    b.ToTable("UserCommonInfos");
                 });
 
             modelBuilder.Entity("PregnancyAppBackend.Entities.WeeklySurvey", b =>
@@ -515,7 +599,7 @@ namespace PregnancyAppBackend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("WeeklySurveys", (string)null);
+                    b.ToTable("WeeklySurveys");
                 });
 
             modelBuilder.Entity("PregnancyAppBackend.Entities.AlgorithmicAnalysisParameterValue", b =>
@@ -538,6 +622,17 @@ namespace PregnancyAppBackend.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PregnancyAppBackend.Entities.HealthPredictionDeviation", b =>
+                {
+                    b.HasOne("PregnancyAppBackend.Entities.HealthPredictionResult", "HealthPredictionResult")
+                        .WithMany("Deviations")
+                        .HasForeignKey("HealthPredictionResultId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("HealthPredictionResult");
                 });
 
             modelBuilder.Entity("PregnancyAppBackend.Entities.MedicalHistory", b =>
@@ -647,6 +742,11 @@ namespace PregnancyAppBackend.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PregnancyAppBackend.Entities.HealthPredictionResult", b =>
+                {
+                    b.Navigation("Deviations");
                 });
 
             modelBuilder.Entity("PregnancyAppBackend.Entities.Security.ApiClaim", b =>

@@ -1,14 +1,17 @@
 import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild} from '@angular/core';
 import {DailySurveyDto} from "../../../../dtos/daily-survey/daily-survey-dto";
 import {DailySurveyService} from "../../../../shared-services/surveys/daily-surveys.service";
 import {TuiTable} from '@taiga-ui/addon-table';
 import {TuiLet} from '@taiga-ui/cdk';
 import {BehaviorSubject, Observable, Subject, switchMap, takeUntil, tap} from 'rxjs';
-import {TuiButton, TuiLoader} from "@taiga-ui/core";
+import {TuiButton, TuiLoader, TuiDialogService} from "@taiga-ui/core";
+import {inject} from "@angular/core";
 import {DailySurveyComponent} from "../../../daily-survey-card/daily-survey/daily-survey.component";
 import {TuiTablePagination, TuiTablePaginationEvent} from '@taiga-ui/addon-table';
 import {ExcelExportService} from "../../../../shared-services/surveys/excel-export.service";
+import {DailyHealthPredictionsService} from "../../../../shared-services/surveys/daily-health-predictions.service";
+import {DailyHealthPredictionResultDto} from "../../../../dtos/daily-health-prediction/daily-health-prediction-result-dto";
 
 @Component({
   selector: 'app-daily-surveys-tab',
@@ -43,6 +46,19 @@ export class DailySurveysTabComponent implements OnChanges, OnInit, OnDestroy {
 
   private readonly destroy$ = new Subject<void>();
 
+  // ML результаты
+  selectedMlResult: DailyHealthPredictionResultDto | null = null;
+  mlLoading = false;
+  mlError: string | null = null;
+
+  // ML диалог
+  mlDialogOpen = false;
+
+  @ViewChild('mlDialogTemplate', {static: true})
+  private readonly mlDialogTemplate!: TemplateRef<any>;
+
+  private readonly dialogs = inject(TuiDialogService);
+
   // Добавляем состояние пагинации
   page = 0; // Страница (начиная с 0)
   size = 10; // Количество элементов на странице
@@ -69,7 +85,11 @@ export class DailySurveysTabComponent implements OnChanges, OnInit, OnDestroy {
     })
   );
 
-  constructor(private dailySurveyService: DailySurveyService, private excelExportService: ExcelExportService) {}
+  constructor(
+    private dailySurveyService: DailySurveyService,
+    private excelExportService: ExcelExportService,
+    private dailyHealthPredictionsService: DailyHealthPredictionsService
+  ) {}
 
   ngOnInit(): void {
     this.data$.pipe(takeUntil(this.destroy$)).subscribe();
@@ -78,6 +98,9 @@ export class DailySurveysTabComponent implements OnChanges, OnInit, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['patientId'] && this.patientId) {
       this.refresh$.next();
+      // сбрасываем выбранные результаты ML при смене пациента
+      this.selectedMlResult = null;
+      this.mlError = null;
     }
   }
 
@@ -152,6 +175,71 @@ export class DailySurveysTabComponent implements OnChanges, OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  viewSurveyMlResults(dailySurvey: DailySurveyDto): void {
+    this.selectedMlResult = null;
+    this.mlError = null;
+    this.mlDialogOpen = false;
+
+    // Ищем результат по dailySurveyId, а не по дате
+    if (!dailySurvey.id) {
+      this.mlError = 'Не удалось определить id ежедневного опроса.';
+      this.mlDialogOpen = false;
+      // показываем диалог даже при ошибке
+      this.dialogs.open(this.mlDialogTemplate, {
+        label: '',
+        size: 'm',
+        closeable: true,
+        dismissible: true,
+      }).subscribe();
+      return;
+    }
+
+    this.mlLoading = true;
+
+    this.dailyHealthPredictionsService.getResultByDailySurveyId(dailySurvey.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (result) => {
+          this.selectedMlResult = result ?? null;
+          this.mlLoading = false;
+
+          this.dialogs.open(this.mlDialogTemplate, {
+            label: '',
+            size: 'm',
+            closeable: true,
+            dismissible: true,
+          }).subscribe();
+        },
+        error: (err) => {
+          console.error('Error fetching ML results:', err);
+          this.mlError = 'Ошибка загрузки результатов ML. Попробуйте позже.';
+          this.mlLoading = false;
+
+          this.dialogs.open(this.mlDialogTemplate, {
+            label: '',
+            size: 'm',
+            closeable: true,
+            dismissible: true,
+          }).subscribe();
+        }
+      });
+  }
+
+  onCloseMlDialog(): void {
+    this.mlDialogOpen = false;
+    this.selectedMlResult = null;
+  }
+
+  getPredictionLabel(prediction: number): string {
+    return prediction === 0 ? 'Норма' : prediction === 1 ? 'Предупреждение' : 'Патология';
+  }
+
+  getDoctorActionsText(prediction: number): string | null {
+    if (prediction === 1) return 'Нужна консультация врача.';
+    if (prediction === 2) return 'Немедленная госпитализация.';
+    return null;
   }
 
   ngOnDestroy(): void {

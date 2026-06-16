@@ -18,6 +18,7 @@ public interface IDatabaseContext
     DbSet<PatientDoctorCommunicationLink> PatientDoctorCommunicationLinks { get; set; }
     DbSet<ObservationParameterNorm> ObservationParameterNorms { get; set; }
     DbSet<AlgorithmicAnalysisParameterValue> AlgorithmicAnalysisParameterValues { get; set; }
+    DbSet<HealthPredictionResult> HealthPredictionResults { get; set; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

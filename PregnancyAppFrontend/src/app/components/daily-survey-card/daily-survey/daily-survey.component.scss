@@ -1,0 +1,101 @@
+/* Стили для отображения прогноза здоровья */
+.prediction-result {
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+  
+  h3 {
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+}
+
+.prediction-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+  margin-bottom: 12px;
+  
+  .status-label {
+    font-weight: 500;
+  }
+  
+  .status-value {
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+}
+
+.prediction-probabilities {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  
+  .probability-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Цветовые схемы для разных статусов */
+.prediction-normal {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  
+  .status-value {
+    color: #155724;
+  }
+  
+  .probability-item {
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+.prediction-alert {
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  color: #856404;
+  
+  .status-value {
+    color: #856404;
+  }
+  
+  .probability-item {
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+.prediction-pathology {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  
+  .status-value {
+    color: #721c24;
+  }
+  
+  .probability-item {
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+.prediction-loading {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  
+  p {
+    margin: 0;
+    font-style: italic;
+  }
+}
+
